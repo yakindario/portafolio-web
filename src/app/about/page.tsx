@@ -9,14 +9,38 @@ import {
   Linkedin,
   Code2,
 } from "lucide-react";
+import type { Metadata } from "next";
+import { AboutPageSchema } from "@/components/shema-markup";
+
+export const metadata: Metadata = {
+  title: "Sobre mí | Yakin Dario - Ingeniero Telemático y DevOps",
+  description: "Conoce mi trayectoria profesional como Ingeniero Telemático, mi experiencia en DevOps, desarrollo Full Stack y mi enfoque en soluciones tecnológicas innovadoras.",
+  keywords: ["biografía profesional", "ingeniero telemático", "experiencia DevOps", "desarrollador Full Stack", "Yakin Dario", "trayectoria profesional", "Desarrollo Web en Puerto Vallarta"],
+  openGraph: {
+    title: "Sobre mí | Yakin Dario - Ingeniero Telemático y DevOps",
+    description: "Conoce mi trayectoria profesional como Ingeniero Telemático especializado en DevOps y desarrollo Full Stack.",
+    images: [
+      {
+        url: "/yakindario.webp", // Reemplaza con tu imagen específica para esta página
+        width: 1200,
+        height: 630,
+        alt: "Yakin Dario - Perfil profesional"
+      }
+    ],
+    type: "profile",
+  },
+};
 
 export default function AboutPage() {
   return (
+    <>
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto space-y-12">
         {/* Header */}
         <header className="text-center space-y-4">
-          <h1 className="text-4xl font-bold">Sobre Mí</h1>
+          <h1 className="text-4xl font-bold">
+            Sobre Mí
+          </h1>
           <p className="text-xl text-muted-foreground">
             Ingeniero en Telemática y desarrollador full‑stack apasionado por el
             DevOps, la nube y la automatización de despliegues.
@@ -275,5 +299,7 @@ export default function AboutPage() {
         </section>
       </div>
     </div>
+      <AboutPageSchema />
+    </>
   );
 }

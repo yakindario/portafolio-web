@@ -1,5 +1,4 @@
-"use client";
-
+"use client"
 import {
   Card,
   CardContent,
@@ -18,9 +17,13 @@ import {
   Linkedin,
   Twitter,
 } from "lucide-react";
+import {ContactPageSchema} from "@/components/shema-markup";
+
+
 
 export default function ContactPage() {
   return (
+    <>
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
@@ -171,5 +174,7 @@ export default function ContactPage() {
         </div>
       </div>
     </div>
+    <ContactPageSchema />
+   </>               
   );
 }
