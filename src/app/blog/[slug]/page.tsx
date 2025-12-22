@@ -14,6 +14,13 @@ type Props = { params: Promise<{ slug: string }> }
 export default async function PostPage({ params }: Props) {
   const { slug } = await params
   const { frontmatter, mdxSource } = await getPostBySlug(slug)
+  
+  // Type casting para frontmatter
+  const title = String(frontmatter.title || '')
+  const date = String(frontmatter.date || '')
+  const category = String(frontmatter.category || '')
+  const tags = Array.isArray(frontmatter.tags) ? frontmatter.tags : []
+  const readingTime = frontmatter.readingTime ? String(frontmatter.readingTime) : ''
 
   return (
     <article className="container max-w-3xl mx-auto px-4 py-10">
@@ -32,32 +39,32 @@ export default async function PostPage({ params }: Props) {
       <header className="mb-10 space-y-4 text-center sm:text-left">
         <div className="space-y-2">
           <h1 className="text-3xl font-extrabold tracking-tight lg:text-5xl">
-            {frontmatter.title}
+            {title}
           </h1>
           
           {/* Metadatos */}
           <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4 text-sm text-muted-foreground">
-            {frontmatter.date && (
+            {date && (
               <div className="flex items-center gap-1">
                 <Calendar className="h-4 w-4" />
-                <time dateTime={frontmatter.date}>
-                  {new Date(frontmatter.date).toLocaleDateString('es-MX', {
+                <time dateTime={date}>
+                  {new Date(date).toLocaleDateString('es-MX', {
                     dateStyle: 'long'
                   })}
                 </time>
               </div>
             )}
-            {frontmatter.readingTime && (
+            {readingTime && (
                <div className="flex items-center gap-1">
                  <Clock className="h-4 w-4" />
-                 <span>{frontmatter.readingTime} min lectura</span>
+                 <span>{readingTime} min lectura</span>
                </div>
             )}
-            {frontmatter.category && (
+            {category && (
               <Button variant="ghost" size="sm" asChild className="h-auto p-0">
-                <Link href={`/blog/category/${frontmatter.category}`}>
+                <Link href={`/blog/category/${category}`}>
                   <Tag className="h-4 w-4 mr-1" />
-                  <span className="capitalize">{frontmatter.category}</span>
+                  <span className="capitalize">{category}</span>
                 </Link>
               </Button>
             )}
@@ -65,9 +72,9 @@ export default async function PostPage({ params }: Props) {
         </div>
 
         {/* Tags */}
-        {frontmatter.tags && frontmatter.tags.length > 0 && (
+        {tags.length > 0 && (
           <div className="flex flex-wrap gap-2 pt-2 justify-center sm:justify-start">
-            {frontmatter.tags.map((tag: string) => (
+            {tags.map((tag: string) => (
               <Badge key={tag} variant="secondary">
                 {tag}
               </Badge>
