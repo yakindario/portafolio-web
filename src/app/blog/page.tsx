@@ -51,7 +51,7 @@ export default async function BlogIndex() {
 
             <CardFooter>
               <div className="w-full flex items-center justify-between">
-                <div className="text-xs text-muted-foreground">{p.author ? p.author : ''}</div>
+                <div className="text-xs text-muted-foreground">{p.author ? String(p.author) : ''}</div>
                 <Button variant="ghost" size="sm" asChild>
                   <Link href={`/blog/${p.slug}`}>Leer</Link>
                 </Button>
