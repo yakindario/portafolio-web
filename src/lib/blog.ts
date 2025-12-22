@@ -65,5 +65,5 @@ export async function getPostBySlug(slug: string) {
     },
   })
 
-  return { frontmatter: data as Record<string, any>, mdxSource }
+  return { frontmatter: data as Record<string, unknown>, mdxSource }
 }
