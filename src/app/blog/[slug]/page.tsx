@@ -1,7 +1,7 @@
 import MDXClient from '@/components/mdx-client'
 import { getPostBySlug } from '@/lib/blog'
 import Link from 'next/link'
-import { Card, CardContent } from '@/components/ui/card'
+// Card components removed - not used in current layout
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { Badge } from '@/components/ui/badge'

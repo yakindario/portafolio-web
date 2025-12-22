@@ -12,7 +12,7 @@ export default async function CategoryPage({ params }: Props) {
   const allPosts = await getAllPosts()
   
   // Filtrar posts por categoría
-  const posts = allPosts.filter((p: any) => p.category === category)
+  const posts = allPosts.filter((p) => p.category === category)
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -40,7 +40,7 @@ export default async function CategoryPage({ params }: Props) {
         </div>
       ) : (
         <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-          {posts.map((p: any) => (
+          {posts.map((p) => (
             <Card key={p.slug} className="flex flex-col justify-between">
               <CardContent>
                 <CardHeader className="p-0">
