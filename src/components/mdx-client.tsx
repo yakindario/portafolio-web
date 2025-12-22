@@ -10,10 +10,11 @@ const components: MDXComponents = {
   a: (props) => <a {...props} className="text-primary underline" />,
   img: (props) => {
     const imgProps = props as React.ImgHTMLAttributes<HTMLImageElement>
+    const src = typeof imgProps.src === 'string' ? imgProps.src : ''
     return (
       <Image
-        src={imgProps.src || ''}
-        alt={imgProps.alt || ''}
+        src={src || '/placeholder.png'}
+        alt={imgProps.alt || 'image'}
         width={600}
         height={400}
         className="rounded mx-auto my-4"
@@ -26,6 +27,7 @@ const components: MDXComponents = {
   p: (props) => <p {...props} className="leading-7 text-muted-foreground" />,
 }
 
-export default function MDXClient({ source }: { source: Record<string, unknown> }) {
+export default function MDXClient({ source }: { source: unknown }) {
+  // @ts-expect-error MDXRemote needs MDXRemoteSerializeResult but source is already serialized
   return <MDXRemote {...source} components={components} />
 }
