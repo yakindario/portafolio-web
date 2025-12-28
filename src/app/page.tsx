@@ -13,7 +13,6 @@ import {
 import Link from "next/link";
 import Image from "next/image";
 import { Metadata } from "next";
-import { PersonSchema } from "@/components/shema-markup"
 import { getAllPosts } from '@/lib/blog'
 
 export const metadata: Metadata = {
@@ -272,7 +271,6 @@ export default async function HomePage() {
           </div>
         </section>
       </div>
-      <PersonSchema />
     </>
   );
 }

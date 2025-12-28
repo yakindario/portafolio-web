@@ -34,6 +34,7 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <>
+    <AboutPageSchema />
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto space-y-12">
         {/* Header */}

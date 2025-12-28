@@ -1,6 +1,7 @@
 import MDXClient from '@/components/mdx-client'
 import { getPostBySlug } from '@/lib/blog'
 import Link from 'next/link'
+import { Metadata } from 'next'
 // Card components removed - not used in current layout
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
@@ -10,6 +11,29 @@ import { ArrowLeft, Calendar, Clock, Tag } from 'lucide-react'
 // Nota: Asegúrate de que esta estructura de tipos coincida con tu versión de Next.js
 // En Next.js 15, params es una Promise.
 type Props = { params: Promise<{ slug: string }> }
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params
+  const { frontmatter } = await getPostBySlug(slug)
+
+  return {
+    title: `${frontmatter.title} | Yakin Dario`,
+    description: (frontmatter.description as string) || `Lee sobre ${frontmatter.title}`,
+    openGraph: {
+      title: frontmatter.title as string,
+      description: (frontmatter.description as string) || undefined,
+      type: 'article',
+      publishedTime: frontmatter.date as string,
+      authors: ['Yakin Dario'],
+      tags: (frontmatter.tags as string[]) || [],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: frontmatter.title as string,
+      description: (frontmatter.description as string) || undefined,
+    }
+  }
+}
 
 export default async function PostPage({ params }: Props) {
   const { slug } = await params

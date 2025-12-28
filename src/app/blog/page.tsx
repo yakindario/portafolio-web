@@ -3,6 +3,16 @@ import { getAllPosts } from '@/lib/blog'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: "Blog | Yakin Dario - Desarrollo Web y DevOps",
+  description: "Artículos, tutoriales y guías sobre desarrollo web, Next.js, React, DevOps, AWS y más. Comparte conocimientos y experiencias.",
+  openGraph: {
+    title: "Blog | Yakin Dario - Desarrollo Web y DevOps",
+    description: "Artículos, tutoriales y guías sobre desarrollo web, Next.js, React, DevOps, AWS y más.",
+  },
+}
 
 export default async function BlogIndex() {
   const posts = await getAllPosts()
