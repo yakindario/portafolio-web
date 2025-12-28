@@ -11,8 +11,9 @@ import {
   Twitter
 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { Metadata } from "next";
-import { PersonSchema } from "@/components/shema-markup"
+import { getAllPosts } from '@/lib/blog'
 
 export const metadata: Metadata = {
   title: "Yakin Dario | Ingeniero Telemático - Especialista en DevOps y Full Stack",
@@ -43,7 +44,9 @@ export const metadata: Metadata = {
 }
 
 
-export default function HomePage() {
+export default async function HomePage() {
+  const posts = await getAllPosts()
+
   return (
     <>
       <div className="container mx-auto px-4 py-8">
@@ -57,7 +60,7 @@ export default function HomePage() {
                   <div className="w-64 h-64 md:w-80 md:h-80 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center border-4 border-primary/10 shadow-2xl">
                     {/* Placeholder para foto de perfil */}
                       <div className="w-56 h-56 md:w-72 md:h-72 rounded-full bg-muted flex items-center justify-center overflow-hidden">
-                      <img
+                      <Image
                         src="/Yakindario.webp"
                         alt="Yakin Dario"
                         width={288}
@@ -233,8 +236,41 @@ export default function HomePage() {
             </Button>
           </div>
         </section>
+        {/* Latest posts section */}
+        <section className="py-16">
+          <h2 className="text-3xl font-bold text-center mb-8">Últimos posts</h2>
+          <div className="max-w-6xl mx-auto">
+            <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {posts.slice(0, 3).map((p) => (
+                <article
+                  key={p.slug}
+                  className="flex flex-col justify-between p-5 border rounded-lg bg-white/5 dark:bg-transparent hover:shadow-lg transition-shadow duration-150"
+                >
+                  <div>
+                    <Link href={`/blog/${p.slug}`} className="text-lg font-semibold hover:underline block">
+                      {p.title || p.slug}
+                    </Link>
+                    {p.description ? (
+                      <p className="text-sm text-muted-foreground mt-2">{p.description}</p>
+                    ) : null}
+                  </div>
+
+                  <div className="mt-4 flex items-center justify-between">
+                    {p.date ? <span className="text-xs text-muted-foreground">{p.date}</span> : <span className="text-xs text-muted-foreground">—</span>}
+                    <Button variant="ghost" size="sm" asChild>
+                      <Link href={`/blog/${p.slug}`}>Leer</Link>
+                    </Button>
+                  </div>
+                </article>
+              ))}
+            </div>
+
+            <div className="text-center mt-8">
+              <Link href="/blog" className="text-sm underline">Ver todos los posts</Link>
+            </div>
+          </div>
+        </section>
       </div>
-      <PersonSchema />
     </>
   );
 }

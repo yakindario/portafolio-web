@@ -8,6 +8,16 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ExternalLink, Github } from "lucide-react";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Proyectos | Yakin Dario - Portafolio de Desarrollo",
+  description: "Explora mis proyectos de desarrollo web, DevOps y aplicaciones Full Stack. Ejemplos de trabajo con Next.js, React, AWS, y más.",
+  openGraph: {
+    title: "Proyectos | Yakin Dario - Portafolio de Desarrollo",
+    description: "Explora mis proyectos de desarrollo web, DevOps y aplicaciones Full Stack.",
+  },
+};
 
 const projects = [
   {
