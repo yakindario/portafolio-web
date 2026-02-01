@@ -66,7 +66,7 @@ export default function RootLayout({
         <PersonSchema />
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <Navigation />
-          <main className="min-h-screen">{children}</main>
+          <main className="min-h-screen pt-8 md:pt-12">{children}</main>
         </ThemeProvider>
       </body>
     </html>

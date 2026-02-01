@@ -21,7 +21,7 @@ export function Navigation() {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <nav className="sticky top-0 z-50 w-full border-b border-primary/10 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           <Link href="/" className="text-xl font-bold">
@@ -37,6 +37,9 @@ export function Navigation() {
                 className={cn(
                   "text-sm font-medium transition-colors hover:text-primary",
                   pathname === item.href ? "text-primary" : "text-muted-foreground",
+                  item.name === "Contacto"
+                    ? "rounded-full border border-primary/40 bg-primary/5 px-3 py-1 text-primary hover:bg-primary/10"
+                    : "",
                 )}
               >
                 {item.name}
