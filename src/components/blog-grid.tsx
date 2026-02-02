@@ -84,7 +84,7 @@ export function BlogGrid({ posts }: BlogGridProps) {
       {/* Posts Grid */}
       {paginatedPosts.length === 0 ? (
         <div className="bg-[oklch(0.18_0.02_260)] rounded-xl border border-[oklch(1_0_0/10%)] p-12 text-center">
-          <p className="text-[oklch(0.6_0.02_260)]">No articles found matching your criteria.</p>
+          <p className="text-[oklch(0.6_0.02_260)]">No se encontraron artículos que coincidan con tu búsqueda.</p>
         </div>
       ) : (
         <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -114,7 +114,7 @@ export function BlogGrid({ posts }: BlogGridProps) {
               className="flex items-center justify-center h-10 px-4 rounded-lg border border-[oklch(1_0_0/15%)] bg-[oklch(0.25_0.02_260)] text-[oklch(0.6_0.02_260)] hover:text-white hover:border-[oklch(0.72_0.15_195)] hover:bg-[oklch(0.22_0.02_260)] transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <ChevronLeft className="w-4 h-4 mr-1" />
-              Previous
+              Anterior
             </button>
 
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
@@ -136,7 +136,7 @@ export function BlogGrid({ posts }: BlogGridProps) {
               disabled={currentPage === totalPages}
               className="flex items-center justify-center h-10 px-4 rounded-lg border border-[oklch(1_0_0/15%)] bg-[oklch(0.25_0.02_260)] text-[oklch(0.75_0.01_260)] hover:text-white hover:border-[oklch(0.72_0.15_195)] hover:bg-[oklch(0.22_0.02_260)] transition-all font-medium group disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Next
+              Siguiente
               <ChevronRight className="w-4 h-4 ml-1" />
             </button>
           </nav>

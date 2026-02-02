@@ -3,11 +3,11 @@ import { BlogGrid } from '@/components/blog-grid'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Blog | Yakindario - Network Engineering & DevOps',
-  description: 'Technical deep dives, tutorials, and thoughts on networking, development, and system architecture.',
+  title: 'Blog | Yakindario - Ingeniería de Redes & DevOps',
+  description: 'Artículos técnicos, tutoriales y reflexiones sobre redes, desarrollo y arquitectura de sistemas.',
   openGraph: {
-    title: 'Blog | Yakindario - Network Engineering & DevOps',
-    description: 'Technical deep dives, tutorials, and thoughts on networking, development, and system architecture.',
+    title: 'Blog | Yakindario - Ingeniería de Redes & DevOps',
+    description: 'Artículos técnicos, tutoriales y reflexiones sobre redes, desarrollo y arquitectura de sistemas.',
   },
 }
 
@@ -23,10 +23,10 @@ export default async function BlogIndex() {
         {/* Header Section */}
         <div className="mb-10 text-center md:text-left">
           <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Latest Articles
+            Últimos Artículos
           </h1>
           <p className="text-[oklch(0.6_0.02_260)] max-w-2xl">
-            Technical deep dives, tutorials, and thoughts on networking, development, and system architecture.
+            Artículos técnicos, tutoriales y reflexiones sobre redes, desarrollo y arquitectura de sistemas.
           </p>
         </div>
 

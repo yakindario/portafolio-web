@@ -12,8 +12,8 @@ interface BlogFiltersProps {
 
 function getCategoryDotColor(category: string) {
   const colors: Record<string, string> = {
-    'Networking': 'bg-[oklch(0.72_0.15_195)]',
-    'Development': 'bg-[oklch(0.75_0.18_140)]',
+    'Redes': 'bg-[oklch(0.72_0.15_195)]',
+    'Desarrollo': 'bg-[oklch(0.75_0.18_140)]',
     'DevOps': 'bg-[oklch(0.75_0.15_55)]',
   }
   return colors[category] || 'bg-[oklch(0.72_0.15_195)]'
@@ -21,8 +21,8 @@ function getCategoryDotColor(category: string) {
 
 function getCategoryHoverColor(category: string) {
   const colors: Record<string, string> = {
-    'Networking': 'hover:text-[oklch(0.72_0.15_195)] hover:border-[oklch(0.72_0.15_195/30%)]',
-    'Development': 'hover:text-[oklch(0.75_0.18_140)] hover:border-[oklch(0.75_0.18_140/30%)]',
+    'Redes': 'hover:text-[oklch(0.72_0.15_195)] hover:border-[oklch(0.72_0.15_195/30%)]',
+    'Desarrollo': 'hover:text-[oklch(0.75_0.18_140)] hover:border-[oklch(0.75_0.18_140/30%)]',
     'DevOps': 'hover:text-[oklch(0.75_0.15_55)] hover:border-[oklch(0.75_0.15_55/30%)]',
   }
   return colors[category] || ''
@@ -52,7 +52,7 @@ export function BlogFilters({
             type="text"
             value={searchQuery}
             onChange={handleSearchChange}
-            placeholder="Search articles..."
+            placeholder="Buscar artículos..."
             className="w-full h-12 bg-[oklch(0.13_0.02_260/50%)] border border-[oklch(1_0_0/15%)] text-[oklch(0.85_0.01_260)] text-sm rounded-lg pl-10 pr-4 focus:ring-1 focus:ring-[oklch(0.72_0.15_195)] focus:border-[oklch(0.72_0.15_195)] placeholder:text-[oklch(0.45_0.02_260)] transition-all font-sans outline-none"
           />
         </div>
@@ -69,7 +69,7 @@ export function BlogFilters({
             }`}
           >
             <LayoutGrid className="w-4 h-4" />
-            All
+            Todos
           </button>
 
           {/* Category Buttons */}

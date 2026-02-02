@@ -301,7 +301,7 @@ export function ProjectCard({ project }: { project: Project }) {
         {/* Featured Badge */}
         {featured && (
           <div className="absolute top-3 left-3 px-2.5 py-1 rounded bg-primary text-primary-foreground text-[10px] font-bold uppercase tracking-wide shadow-lg">
-            Featured
+            Destacado
           </div>
         )}
       </div>
