@@ -9,12 +9,20 @@ const postsDir = path.join(process.cwd(), 'src', 'content', 'blog')
 interface Post {
   slug: string
   excerpt: string
+  readingTime: number
   title?: string
   date?: string
   description?: string
   category?: string
   tags?: string[]
+  image?: string
   [key: string]: unknown
+}
+
+function calculateReadingTime(content: string): number {
+  const wordsPerMinute = 200
+  const words = content.trim().split(/\s+/).length
+  return Math.max(1, Math.ceil(words / wordsPerMinute))
 }
 
 export async function getAllPosts(): Promise<Post[]> {
@@ -32,7 +40,8 @@ export async function getAllPosts(): Promise<Post[]> {
           const firstParagraph = (content || '').split(/\n\s*\n/).find((p) => p && p.trim().length > 0) || ''
           const plain = firstParagraph.replace(/[#>*`]/g, '').trim()
           const excerpt = plain.length > 160 ? plain.slice(0, 157) + '...' : plain
-          return { slug, excerpt, ...(data as Record<string, unknown>) } as Post
+          const readingTime = calculateReadingTime(content)
+          return { slug, excerpt, readingTime, ...(data as Record<string, unknown>) } as Post
         })
     )
     // opcional: ordenar por fecha

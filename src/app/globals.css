@@ -120,3 +120,65 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Blog Design System */
+:root {
+  --blog-primary: oklch(0.72 0.15 195);
+  --tag-networking: oklch(0.72 0.15 195);
+  --tag-dev: oklch(0.75 0.18 140);
+  --tag-devops: oklch(0.75 0.15 55);
+}
+
+.dark {
+  --blog-primary: oklch(0.72 0.15 195);
+  --tag-networking: oklch(0.72 0.15 195);
+  --tag-dev: oklch(0.75 0.18 140);
+  --tag-devops: oklch(0.75 0.15 55);
+}
+
+/* Dot grid pattern */
+.bg-dot-grid {
+  background-image: radial-gradient(circle, currentColor 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Glass panel effect */
+.glass-panel {
+  background: oklch(0.15 0.02 260 / 80%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Blog card hover glow */
+.blog-card-glow {
+  transition: all 0.3s ease;
+}
+
+.blog-card-glow:hover {
+  box-shadow: 0 0 30px oklch(0.72 0.15 195 / 15%);
+}
+
+/* Category tag colors */
+.tag-networking {
+  color: var(--tag-networking);
+}
+
+.tag-development {
+  color: var(--tag-dev);
+}
+
+.tag-devops {
+  color: var(--tag-devops);
+}
+
+.bg-tag-networking {
+  background-color: var(--tag-networking);
+}
+
+.bg-tag-dev {
+  background-color: var(--tag-dev);
+}
+
+.bg-tag-devops {
+  background-color: var(--tag-devops);
+}

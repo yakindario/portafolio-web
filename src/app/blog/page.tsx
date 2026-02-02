@@ -1,16 +1,13 @@
-import Link from 'next/link'
 import { getAllPosts } from '@/lib/blog'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
+import { BlogGrid } from '@/components/blog-grid'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: "Blog | Yakin Dario - Desarrollo Web y DevOps",
-  description: "Artículos, tutoriales y guías sobre desarrollo web, Next.js, React, DevOps, AWS y más. Comparte conocimientos y experiencias.",
+  title: 'Blog | Yakindario - Network Engineering & DevOps',
+  description: 'Technical deep dives, tutorials, and thoughts on networking, development, and system architecture.',
   openGraph: {
-    title: "Blog | Yakin Dario - Desarrollo Web y DevOps",
-    description: "Artículos, tutoriales y guías sobre desarrollo web, Next.js, React, DevOps, AWS y más.",
+    title: 'Blog | Yakindario - Network Engineering & DevOps',
+    description: 'Technical deep dives, tutorials, and thoughts on networking, development, and system architecture.',
   },
 }
 
@@ -18,58 +15,24 @@ export default async function BlogIndex() {
   const posts = await getAllPosts()
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <header className="mb-8">
-        <h1 className="text-4xl font-bold">Blog</h1>
-        <p className="text-muted-foreground mt-2">Artículos y notas sobre desarrollo y DevOps.</p>
-      </header>
+    <div className="relative min-h-screen">
+      {/* Background dot pattern */}
+      <div className="fixed inset-0 pointer-events-none z-0 text-[oklch(1_0_0/8%)] bg-dot-grid" />
 
-      <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-        {posts.map((p) => (
-          <Card key={p.slug} className="flex flex-col justify-between">
-            <CardContent>
-              <CardHeader className="p-0">
-                <div className="flex items-start justify-between gap-2 mb-2">
-                  <CardTitle className="text-lg">
-                    <Link href={`/blog/${p.slug}`} className="hover:underline">{p.title || p.slug}</Link>
-                  </CardTitle>
-                  {p.category && (
-                    <Button variant="ghost" size="sm" asChild>
-                      <Link href={`/blog/category/${p.category}`} className="text-xs">
-                        <Badge variant="secondary" className="text-xs">{p.category}</Badge>
-                      </Link>
-                    </Button>
-                  )}
-                </div>
-                {p.date ? <div className="text-xs text-muted-foreground">{p.date}</div> : null}
-              </CardHeader>
+      <main className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        {/* Header Section */}
+        <div className="mb-10 text-center md:text-left">
+          <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            Latest Articles
+          </h1>
+          <p className="text-[oklch(0.6_0.02_260)] max-w-2xl">
+            Technical deep dives, tutorials, and thoughts on networking, development, and system architecture.
+          </p>
+        </div>
 
-              {p.description || p.excerpt ? (
-                <CardDescription className="mt-3 text-sm text-muted-foreground">{p.description || p.excerpt}</CardDescription>
-              ) : null}
-
-              {p.tags && p.tags.length > 0 && (
-                <div className="flex flex-wrap gap-1 mt-3">
-                  {p.tags.map((tag: string) => (
-                    <Badge key={tag} variant="outline" className="text-xs">
-                      {tag}
-                    </Badge>
-                  ))}
-                </div>
-              )}
-            </CardContent>
-
-            <CardFooter>
-              <div className="w-full flex items-center justify-between">
-                <div className="text-xs text-muted-foreground">{p.author ? String(p.author) : ''}</div>
-                <Button variant="ghost" size="sm" asChild>
-                  <Link href={`/blog/${p.slug}`}>Leer</Link>
-                </Button>
-              </div>
-            </CardFooter>
-          </Card>
-        ))}
-      </div>
+        {/* Blog Grid with Filters */}
+        <BlogGrid posts={posts} />
+      </main>
     </div>
   )
 }
