@@ -1,243 +1,192 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { ExternalLink, Github } from "lucide-react";
-import { Metadata } from "next";
+'use client'
 
-export const metadata: Metadata = {
-  title: "Proyectos | Yakin Dario - Portafolio de Desarrollo",
-  description: "Explora mis proyectos de desarrollo web, DevOps y aplicaciones Full Stack. Ejemplos de trabajo con Next.js, React, AWS, y más.",
-  openGraph: {
-    title: "Proyectos | Yakin Dario - Portafolio de Desarrollo",
-    description: "Explora mis proyectos de desarrollo web, DevOps y aplicaciones Full Stack.",
-  },
-};
+import { useState } from 'react'
+import { Github } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { ProjectCard, Project } from '@/components/project-card'
+import { ProjectFilters } from '@/components/project-filters'
 
-const projects = [
+const projects: Project[] = [
   {
     id: 1,
-    title: "Portafolio Web & Blog",
+    title: 'Portafolio Web & Blog',
     description:
-      "Sitio personal construido con Next.js y Tailwind CSS, CI/CD en GitHub Actions y despliegue continuo en Vercel. Incluye blog en MDX y sección de IA.",
-    image: "/images/projects/portfolio.png",
+      'Sitio personal construido con Next.js y Tailwind CSS, CI/CD en GitHub Actions y despliegue continuo en Vercel. Incluye blog en MDX y sección de IA.',
+    image: '/images/projects/portfolio.png',
+    imageType: 'default',
     technologies: [
-      "Next.js",
-      "React",
-      "Tailwind CSS",
-      "TypeScript",
-      "Vercel",
+      { name: 'Next.js', color: 'nextjs' },
+      { name: 'React', color: 'react' },
+      { name: 'Tailwind CSS', color: 'tailwind' },
+      { name: 'TypeScript', color: 'typescript' },
+      { name: 'Vercel', color: 'vercel' },
     ],
-    githubUrl: "https://github.com/yakindario/portafolio-web",
-    liveUrl: "https://yakindario.com",
+    githubUrl: 'https://github.com/yakindario/portafolio-web',
+    liveUrl: 'https://yakindario.com',
     featured: true,
+    category: 'web-apps',
+    icon: 'hub',
   },
   {
     id: 2,
-    title: "E‑commerce en Laravel",
+    title: 'E-commerce en Laravel',
     description:
-      "Plataforma de comercio electrónico con gestión de productos, roles (Spatie), pagos con Mercado Pago y componentes dinámicos en Livewire Volt.",
-    image: "/images/projects/ecommerce.png",
+      'Plataforma de comercio electrónico con gestión de productos, roles (Spatie), pagos con Mercado Pago y componentes dinámicos en Livewire Volt.',
+    imageType: 'default',
     technologies: [
-      "Laravel",
-      "PHP",
-      "Livewire",
-      "Tailwind CSS",
-      "MySQL",
-      "Mercado Pago",
+      { name: 'Laravel', color: 'laravel' },
+      { name: 'PHP', color: 'php' },
+      { name: 'Livewire', color: 'livewire' },
+      { name: 'Tailwind CSS', color: 'tailwind' },
+      { name: 'MySQL', color: 'mysql' },
+      { name: 'Mercado Pago', color: 'mercadopago' },
     ],
-    githubUrl: "https://github.com/yakindario/ecommerce-proyecto-laravel",
-    liveUrl: "",
+    githubUrl: 'https://github.com/yakindario/ecommerce-proyecto-laravel',
     featured: true,
+    category: 'web-apps',
+    icon: 'hub',
   },
   {
     id: 3,
-    title: "DevOps Pipeline con Kubernetes",
+    title: 'DevOps Pipeline con Kubernetes',
     description:
-      "Pipeline CI/CD que construye, prueba y despliega automáticamente una aplicación en un clúster Kubernetes en DigitalOcean usando GitHub Actions y Helm.",
-    image: "/images/projects/devops.png",
-    technologies: [
-      "Docker",
-      "Kubernetes",
-      "GitHub Actions",
-      "Helm",
-      "DigitalOcean",
+      'Pipeline CI/CD que construye, prueba y despliega automáticamente una aplicación en un clúster Kubernetes en DigitalOcean usando GitHub Actions y Helm.',
+    imageType: 'terminal',
+    terminalContent: [
+      'user@yakindario:~$ ./deploy.sh',
+      '[+] Building Docker image...',
+      '[INFO] Pushing to registry...',
+      '[INFO] Deploying to K8s cluster...',
+      '[+] Deployment successful!',
+      '_'
     ],
-    githubUrl: "https://github.com/yakindario/DevOps-Proyecto",
-    liveUrl: "",
+    technologies: [
+      { name: 'Docker', color: 'docker' },
+      { name: 'Kubernetes', color: 'kubernetes' },
+      { name: 'GitHub Actions', color: 'github' },
+      { name: 'Helm', color: 'helm' },
+      { name: 'DigitalOcean', color: 'digitalocean' },
+    ],
+    githubUrl: 'https://github.com/yakindario/DevOps-Proyecto',
     featured: true,
+    category: 'infrastructure',
+    icon: 'terminal',
   },
   {
     id: 4,
-    title: "Bootcamp SQL – Análisis de Reservaciones",
+    title: 'Bootcamp SQL – Análisis de Reservaciones',
     description:
-      "Notebook que responde preguntas de negocio sobre una base de datos de reservaciones de hotel usando SQL y Python.",
-    image: "/images/projects/sql_bootcamp.png",
-    technologies: ["SQLite", "SQL", "Python", "Pandas", "Jupyter"],
-    githubUrl: "https://github.com/yakindario/Bootcamp-de-SQL-",
-    liveUrl: "",
+      'Notebook que responde preguntas de negocio sobre una base de datos de reservaciones de hotel usando SQL y Python.',
+    imageType: 'default',
+    technologies: [
+      { name: 'SQLite', color: 'sqlite' },
+      { name: 'SQL', color: 'sql' },
+      { name: 'Python', color: 'python' },
+      { name: 'Pandas', color: 'pandas' },
+      { name: 'Jupyter', color: 'jupyter' },
+    ],
+    githubUrl: 'https://github.com/yakindario/Bootcamp-de-SQL-',
     featured: false,
+    category: 'data',
+    icon: 'hub',
   },
   {
     id: 5,
-    title: "Diseño BD Reservaciones Hotel",
+    title: 'Diseño BD Reservaciones Hotel',
     description:
-      "Modelo relacional normalizado para gestionar huéspedes, habitaciones y pagos, implementado en SQLite.",
-    image: "/images/projects/hotel_db.png",
-    technologies: ["SQLite", "DB Design", "ERD"],
-    githubUrl:
-      "https://github.com/yakindario/Base-de-Datos-Reservaciones-Hotel",
-    liveUrl: "",
+      'Modelo relacional normalizado para gestionar huéspedes, habitaciones y pagos, implementado en SQLite.',
+    imageType: 'network',
+    technologies: [
+      { name: 'SQLite', color: 'sqlite' },
+      { name: 'DB Design', color: 'network' },
+      { name: 'ERD', color: 'network' },
+    ],
+    githubUrl: 'https://github.com/yakindario/Base-de-Datos-Reservaciones-Hotel',
     featured: false,
+    category: 'data',
+    icon: 'share',
   },
-];
+]
 
 export default function ProjectsPage() {
-  const featuredProjects = projects.filter((p) => p.featured);
-  const otherProjects = projects.filter((p) => !p.featured);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+
+  const filteredProjects = selectedCategory
+    ? projects.filter((p) => p.category === selectedCategory)
+    : projects
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <header className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-4">Mis Proyectos</h1>
-          <p className="text-xl text-muted-foreground">
-            Selección de trabajos donde combino desarrollo, DevOps y bases de
-            datos
-          </p>
-        </header>
+    <div className="min-h-screen">
+      {/* Background pattern */}
+      <div className="fixed inset-0 z-0 pointer-events-none opacity-5 bg-dot-grid text-white" />
+      
+      <div className="relative z-10">
+        <section className="pt-12 pb-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+          {/* Header */}
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+            <div className="space-y-3">
+              <h1 className="text-4xl md:text-5xl font-black tracking-tight">
+                Proyectos
+                <span className="text-primary">.</span>
+              </h1>
+              <p className="text-muted-foreground text-lg max-w-2xl">
+                Portafolio de Ingeniería y Desarrollo. Una colección de aplicaciones web, 
+                pipelines DevOps y proyectos de bases de datos.
+              </p>
+            </div>
+            
+            {/* Filters */}
+            <ProjectFilters
+              selectedCategory={selectedCategory}
+              onCategoryChange={setSelectedCategory}
+            />
+          </div>
 
-        {/* Featured */}
-        <section className="mb-16">
-          <h2 className="text-2xl font-bold mb-8">Proyectos Destacados</h2>
-          <div className="grid lg:grid-cols-2 gap-8">
-            {featuredProjects.map((project) => (
-              <Card key={project.id} className="overflow-hidden">
-                {/* Image placeholder */}
-                <div className="aspect-video bg-muted flex items-center justify-center">
-                  <span className="text-sm text-muted-foreground">
-                    Imagen del Proyecto
-                  </span>
-                </div>
-                <CardHeader>
-                  <CardTitle className="flex items-center justify-between">
-                    {project.title}
-                    <Badge variant="secondary">Destacado</Badge>
-                  </CardTitle>
-                  <CardDescription>{project.description}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {project.technologies.map((tech) => (
-                      <Badge key={tech} variant="outline">
-                        {tech}
-                      </Badge>
-                    ))}
-                  </div>
-                  <div className="flex gap-2">
-                    <Button variant="outline" size="sm" asChild>
-                      <a
-                        href={project.githubUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <Github className="h-4 w-4 mr-2" /> Código
-                      </a>
-                    </Button>
-                    {project.liveUrl && (
-                      <Button size="sm" asChild>
-                        <a
-                          href={project.liveUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          <ExternalLink className="h-4 w-4 mr-2" /> Ver Demo
-                        </a>
-                      </Button>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
+          {/* Projects Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredProjects.map((project) => (
+              <ProjectCard key={project.id} project={project} />
             ))}
           </div>
+
+          {/* Empty state */}
+          {filteredProjects.length === 0 && (
+            <div className="text-center py-16">
+              <p className="text-muted-foreground text-lg">
+                No se encontraron proyectos en esta categoría.
+              </p>
+            </div>
+          )}
         </section>
 
-        {/* Others */}
-        <section>
-          <h2 className="text-2xl font-bold mb-8">Otros Proyectos</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {otherProjects.map((project) => (
-              <Card key={project.id} className="overflow-hidden">
-                <div className="aspect-video bg-muted flex items-center justify-center">
-                  <span className="text-xs text-muted-foreground">Imagen</span>
-                </div>
-                <CardHeader>
-                  <CardTitle className="text-lg">{project.title}</CardTitle>
-                  <CardDescription className="text-sm">
-                    {project.description}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex flex-wrap gap-1 mb-4">
-                    {project.technologies.slice(0, 3).map((tech) => (
-                      <Badge key={tech} variant="outline" className="text-xs">
-                        {tech}
-                      </Badge>
-                    ))}
-                    {project.technologies.length > 3 && (
-                      <Badge variant="outline" className="text-xs">
-                        +{project.technologies.length - 3}
-                      </Badge>
-                    )}
-                  </div>
-                  <div className="flex gap-2">
-                    <Button variant="outline" size="sm" asChild>
-                      <a
-                        href={project.githubUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <Github className="h-3 w-3" />
-                      </a>
-                    </Button>
-                    {project.liveUrl && (
-                      <Button size="sm" asChild>
-                        <a
-                          href={project.liveUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          <ExternalLink className="h-3 w-3" />
-                        </a>
-                      </Button>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </section>
-
-        {/* CTA */}
-        <section className="text-center py-16">
-          <div className="max-w-2xl mx-auto">
-            <h2 className="text-3xl font-bold mb-4">¿Te gusta lo que ves?</h2>
-            <p className="text-xl text-muted-foreground mb-8">
-              Estos son algunos de mis proyectos. ¡Hablemos sobre cómo puedo
-              ayudar en tu iniciativa!
-            </p>
-            <Button size="lg" asChild>
-              <a href="/contact">Trabajemos Juntos</a>
+        {/* GitHub CTA Section */}
+        <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full pb-16">
+          <div className="bg-[oklch(0.16_0.02_260)] border border-[oklch(1_0_0/10%)] rounded-2xl p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div>
+              <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
+                ¿Quieres ver más código?
+              </h2>
+              <p className="text-muted-foreground">
+                Revisa mis repositorios y contribuciones en GitHub.
+              </p>
+            </div>
+            <Button 
+              size="lg" 
+              className="bg-primary hover:bg-white hover:text-black text-primary-foreground font-bold shrink-0"
+              asChild
+            >
+              <a 
+                href="https://github.com/yakindario" 
+                target="_blank" 
+                rel="noopener noreferrer"
+              >
+                <Github className="w-5 h-5 mr-2" />
+                Ver Perfil de GitHub
+              </a>
             </Button>
           </div>
         </section>
       </div>
     </div>
-  );
+  )
 }
