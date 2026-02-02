@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
 import { Navigation } from "@/components/navigation"
+import { Footer } from "@/components/footer"
 import { ThemeProvider } from "@/components/theme-provider"
 import { PersonSchema } from "@/components/shema-markup"
 
@@ -65,8 +66,11 @@ export default function RootLayout({
       <body className={inter.className}>
         <PersonSchema />
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          <Navigation />
-          <main className="min-h-screen pt-8 md:pt-12">{children}</main>
+          <div className="flex min-h-screen flex-col">
+            <Navigation />
+            <main className="flex-1 pt-8 md:pt-12">{children}</main>
+            <Footer />
+          </div>
         </ThemeProvider>
       </body>
     </html>
