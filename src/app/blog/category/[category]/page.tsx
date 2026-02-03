@@ -4,8 +4,26 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { ArrowLeft } from 'lucide-react'
+import { Metadata } from 'next'
 
 type Props = { params: Promise<{ category: string }> }
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { category } = await params
+  const categoryTitle = category.charAt(0).toUpperCase() + category.slice(1)
+  
+  return {
+    title: `${categoryTitle} | Blog - Yakin Dario`,
+    description: `Artículos sobre ${categoryTitle} en el blog de Yakin Dario.`,
+    openGraph: {
+      title: `${categoryTitle} | Blog - Yakin Dario`,
+      description: `Artículos sobre ${categoryTitle} en el blog de Yakin Dario.`,
+    },
+    alternates: {
+      canonical: `/blog/category/${category}`,
+    },
+  }
+}
 
 export default async function CategoryPage({ params }: Props) {
   const { category } = await params
