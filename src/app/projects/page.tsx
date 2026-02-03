@@ -161,9 +161,9 @@ export default function ProjectsPage() {
 
         {/* GitHub CTA Section */}
         <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full pb-16">
-          <div className="bg-[oklch(0.16_0.02_260)] border border-[oklch(1_0_0/10%)] rounded-2xl p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="bg-card border border-border rounded-2xl p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-6">
             <div>
-              <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
+              <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
                 ¿Quieres ver más código?
               </h2>
               <p className="text-muted-foreground">
@@ -172,7 +172,7 @@ export default function ProjectsPage() {
             </div>
             <Button 
               size="lg" 
-              className="bg-primary hover:bg-white hover:text-black text-primary-foreground font-bold shrink-0"
+              className="bg-primary hover:bg-foreground hover:text-background text-primary-foreground font-bold shrink-0"
               asChild
             >
               <a 

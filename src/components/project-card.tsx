@@ -162,12 +162,12 @@ function getTechColor(color: string) {
 
 function getProjectIcon(icon?: string) {
   const icons: Record<string, React.ReactNode> = {
-    hub: <HardDrive className="w-5 h-5 text-[oklch(0.5_0.02_260)]" />,
-    terminal: <Terminal className="w-5 h-5 text-[oklch(0.5_0.02_260)]" />,
-    smartphone: <Smartphone className="w-5 h-5 text-[oklch(0.5_0.02_260)]" />,
-    dns: <HardDrive className="w-5 h-5 text-[oklch(0.5_0.02_260)]" />,
-    share: <Share2 className="w-5 h-5 text-[oklch(0.5_0.02_260)]" />,
-    archive: <Archive className="w-5 h-5 text-[oklch(0.5_0.02_260)]" />,
+    hub: <HardDrive className="w-5 h-5 text-muted-foreground" />,
+    terminal: <Terminal className="w-5 h-5 text-muted-foreground" />,
+    smartphone: <Smartphone className="w-5 h-5 text-muted-foreground" />,
+    dns: <HardDrive className="w-5 h-5 text-muted-foreground" />,
+    share: <Share2 className="w-5 h-5 text-muted-foreground" />,
+    archive: <Archive className="w-5 h-5 text-muted-foreground" />,
   }
   return icons[icon || 'hub'] || icons.hub
 }
@@ -175,9 +175,9 @@ function getProjectIcon(icon?: string) {
 // Terminal preview component
 function TerminalPreview({ content }: { content: string[] }) {
   return (
-    <div className="h-48 w-full relative flex flex-col bg-[oklch(0.08_0.02_260)] border-b border-[oklch(1_0_0/10%)]">
+    <div className="h-48 w-full relative flex flex-col bg-[#0d1117] dark:bg-[#0d1117] border-b border-border">
       {/* Terminal header */}
-      <div className="h-8 bg-[oklch(0.10_0.02_260)] border-b border-[oklch(1_0_0/10%)] flex items-center px-4 gap-1.5 shrink-0">
+      <div className="h-8 bg-[#161b22] dark:bg-[#161b22] border-b border-border flex items-center px-4 gap-1.5 shrink-0">
         <div className="w-2.5 h-2.5 rounded-full bg-red-500" />
         <div className="w-2.5 h-2.5 rounded-full bg-yellow-500" />
         <div className="w-2.5 h-2.5 rounded-full bg-green-500" />
@@ -187,10 +187,10 @@ function TerminalPreview({ content }: { content: string[] }) {
         {content.map((line, i) => (
           <p key={i} className={`mb-1 ${
             line.startsWith('user@') ? 'text-green-400' : 
-            line.startsWith('[+]') ? 'text-[oklch(0.5_0.02_260)]' :
+            line.startsWith('[+]') ? 'text-muted-foreground' :
             line.startsWith('[INFO]') ? 'text-blue-400' :
             line === '_' ? 'text-green-400 animate-blink' :
-            'text-white'
+            'text-slate-200'
           }`}>
             {line === '_' ? '█' : line}
           </p>
@@ -203,16 +203,16 @@ function TerminalPreview({ content }: { content: string[] }) {
 // Phone mockup preview
 function PhonePreview() {
   return (
-    <div className="h-48 w-full relative overflow-hidden bg-[oklch(0.12_0.02_260)] border-b border-[oklch(1_0_0/10%)] flex items-end justify-center">
-      <div className="w-28 h-36 bg-black rounded-t-xl border-4 border-[oklch(0.25_0.02_260)] border-b-0 shadow-2xl relative translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
-        <div className="w-full h-full bg-[oklch(0.15_0.02_260)] p-2">
+    <div className="h-48 w-full relative overflow-hidden bg-muted border-b border-border flex items-end justify-center">
+      <div className="w-28 h-36 bg-background rounded-t-xl border-4 border-muted-foreground/30 border-b-0 shadow-2xl relative translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
+        <div className="w-full h-full bg-card p-2">
           <div className="flex justify-between mb-2">
             <div className="w-5 h-5 rounded-full bg-primary/20" />
-            <div className="w-8 h-1.5 bg-[oklch(0.3_0.02_260)] rounded-full" />
+            <div className="w-8 h-1.5 bg-muted rounded-full" />
           </div>
           <div className="space-y-2">
-            <div className="h-8 w-full bg-[oklch(0.25_0.02_260)] rounded" />
-            <div className="h-8 w-full bg-[oklch(0.25_0.02_260)] rounded" />
+            <div className="h-8 w-full bg-muted rounded" />
+            <div className="h-8 w-full bg-muted rounded" />
           </div>
         </div>
       </div>
@@ -223,7 +223,7 @@ function PhonePreview() {
 // Network visualization preview
 function NetworkPreview() {
   return (
-    <div className="h-48 w-full relative overflow-hidden bg-[oklch(0.08_0.02_260)] border-b border-[oklch(1_0_0/10%)] flex items-center justify-center">
+    <div className="h-48 w-full relative overflow-hidden bg-muted border-b border-border flex items-center justify-center">
       <div className="absolute inset-0 opacity-40 group-hover:opacity-60 transition-opacity">
         <svg className="w-full h-full text-primary" viewBox="0 0 200 100" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
           <circle cx="100" cy="50" r="4" fill="currentColor" />
@@ -234,7 +234,7 @@ function NetworkPreview() {
           <path d="M100 50 L50 30 M100 50 L150 30 M100 50 L50 70 M100 50 L150 70" stroke="currentColor" strokeWidth="0.5" />
         </svg>
       </div>
-      <div className="absolute bottom-2 right-2 px-1.5 py-0.5 rounded bg-black/60 border border-[oklch(1_0_0/15%)] text-[10px] text-[oklch(0.5_0.02_260)] font-mono">
+      <div className="absolute bottom-2 right-2 px-1.5 py-0.5 rounded bg-background/60 border border-border text-[10px] text-muted-foreground font-mono">
         v1.0.0
       </div>
     </div>
@@ -244,7 +244,7 @@ function NetworkPreview() {
 // Server/Image preview
 function ImagePreview({ image, alt }: { image?: string; alt: string }) {
   return (
-    <div className="h-48 w-full relative overflow-hidden bg-[oklch(0.15_0.02_260)] border-b border-[oklch(1_0_0/10%)]">
+    <div className="h-48 w-full relative overflow-hidden bg-muted border-b border-border">
       {image ? (
         <>
           <div 
@@ -254,8 +254,8 @@ function ImagePreview({ image, alt }: { image?: string; alt: string }) {
           <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors" />
         </>
       ) : (
-        <div className="w-full h-full bg-gradient-to-br from-[oklch(0.25_0.03_260)] to-[oklch(0.12_0.02_260)] flex items-center justify-center">
-          <span className="text-[oklch(1_0_0/15%)] text-6xl font-bold">{alt.charAt(0)}</span>
+        <div className="w-full h-full bg-gradient-to-br from-muted to-background flex items-center justify-center">
+          <span className="text-muted-foreground/30 text-6xl font-bold">{alt.charAt(0)}</span>
         </div>
       )}
     </div>
@@ -265,9 +265,9 @@ function ImagePreview({ image, alt }: { image?: string; alt: string }) {
 // Archive preview
 function ArchivePreview() {
   return (
-    <div className="h-48 w-full relative overflow-hidden bg-[oklch(0.15_0.02_260)] border-b border-[oklch(1_0_0/10%)] flex items-center justify-center">
-      <div className="w-14 h-14 rounded-full bg-[oklch(0.25_0.02_260/80%)] border border-[oklch(1_0_0/15%)] flex items-center justify-center group-hover:scale-110 transition-transform duration-300 group-hover:border-primary/50">
-        <Archive className="w-7 h-7 text-[oklch(0.5_0.02_260)] group-hover:text-white transition-colors" />
+    <div className="h-48 w-full relative overflow-hidden bg-muted border-b border-border flex items-center justify-center">
+      <div className="w-14 h-14 rounded-full bg-card border border-border flex items-center justify-center group-hover:scale-110 transition-transform duration-300 group-hover:border-primary/50">
+        <Archive className="w-7 h-7 text-muted-foreground group-hover:text-foreground transition-colors" />
       </div>
     </div>
   )
@@ -293,7 +293,7 @@ export function ProjectCard({ project }: { project: Project }) {
   }
 
   return (
-    <article className="group flex flex-col h-full bg-[oklch(0.16_0.02_260)] border border-[oklch(1_0_0/8%)] rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:border-primary hover:shadow-[0_10px_40px_-10px_oklch(0.72_0.19_195/20%)]">
+    <article className="group flex flex-col h-full bg-card border border-border rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:border-primary hover:shadow-[0_10px_40px_-10px_oklch(0.72_0.19_195/20%)]">
       {/* Image/Preview Section */}
       <div className="relative">
         {renderPreview()}
@@ -310,14 +310,14 @@ export function ProjectCard({ project }: { project: Project }) {
       <div className="flex flex-col flex-1 p-5">
         {/* Title with icon */}
         <div className="flex items-center justify-between mb-2">
-          <h3 className="text-xl font-bold text-white group-hover:text-primary transition-colors">
+          <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors">
             {title}
           </h3>
           {getProjectIcon(icon)}
         </div>
 
         {/* Description */}
-        <p className="text-[oklch(0.55_0.02_260)] text-sm mb-4 line-clamp-3 leading-relaxed">
+        <p className="text-muted-foreground text-sm mb-4 line-clamp-3 leading-relaxed">
           {description}
         </p>
 
@@ -337,11 +337,11 @@ export function ProjectCard({ project }: { project: Project }) {
         </div>
 
         {/* Action Buttons */}
-        <div className="mt-auto pt-4 border-t border-[oklch(1_0_0/5%)] flex items-center gap-2">
+        <div className="mt-auto pt-4 border-t border-border flex items-center gap-2">
           {liveUrl && (
             <Button 
               size="sm" 
-              className="flex-1 bg-primary hover:bg-white hover:text-black text-primary-foreground font-bold text-xs"
+              className="flex-1 bg-primary hover:bg-foreground hover:text-background text-primary-foreground font-bold text-xs"
               asChild
             >
               <a href={liveUrl} target="_blank" rel="noopener noreferrer">
@@ -355,7 +355,7 @@ export function ProjectCard({ project }: { project: Project }) {
             <Button 
               variant="outline" 
               size="sm"
-              className="flex-1 border-[oklch(1_0_0/15%)] text-white hover:border-white hover:bg-[oklch(0.25_0.02_260)] text-xs"
+              className="flex-1 border-border text-foreground hover:border-foreground hover:bg-muted text-xs"
               asChild
             >
               <a href={docsUrl} target="_blank" rel="noopener noreferrer">
@@ -367,7 +367,7 @@ export function ProjectCard({ project }: { project: Project }) {
           <Button 
             variant="outline" 
             size="sm"
-            className={`${!liveUrl && !docsUrl ? 'flex-1' : ''} border-[oklch(1_0_0/15%)] text-white hover:border-white hover:bg-[oklch(0.25_0.02_260)] text-xs`}
+            className={`${!liveUrl && !docsUrl ? 'flex-1' : ''} border-border text-foreground hover:border-foreground hover:bg-muted text-xs`}
             asChild
           >
             <a href={githubUrl} target="_blank" rel="noopener noreferrer">

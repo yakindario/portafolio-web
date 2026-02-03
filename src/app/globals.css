@@ -6,8 +6,8 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-jetbrains-mono);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -232,4 +232,80 @@
 
 .animate-blink {
   animation: blink 1s infinite;
+}
+
+/* Blog Post Typography */
+.prose-blog {
+  @apply max-w-none;
+}
+
+.prose-blog h1 {
+  @apply text-4xl md:text-5xl font-black text-foreground leading-tight tracking-tight;
+}
+
+.prose-blog h2 {
+  @apply text-3xl font-bold text-foreground mt-12 mb-4;
+  background: linear-gradient(to right, var(--foreground), var(--primary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.prose-blog h3 {
+  @apply text-2xl font-bold text-foreground mt-8 mb-3;
+}
+
+.prose-blog h4 {
+  @apply text-xl font-semibold text-foreground mt-6 mb-2;
+}
+
+.prose-blog p {
+  @apply leading-7 text-muted-foreground my-4;
+}
+
+.prose-blog strong {
+  @apply font-bold text-foreground;
+}
+
+.prose-blog code {
+  @apply font-mono;
+}
+
+.prose-blog pre code {
+  @apply text-[#e2e8f0];
+}
+
+/* Code syntax highlighting colors */
+.prose-blog pre code .keyword {
+  @apply text-[#c792ea];
+}
+
+.prose-blog pre code .function {
+  @apply text-[#82aaff];
+}
+
+.prose-blog pre code .string {
+  @apply text-[#c3e88d];
+}
+
+.prose-blog pre code .comment {
+  @apply text-[#546e7a] italic;
+}
+
+.prose-blog pre code .number {
+  @apply text-[#f78c6c];
+}
+
+.prose-blog pre code .operator {
+  @apply text-[#89ddff];
+}
+
+/* Horizontal separator */
+.section-separator {
+  @apply relative my-16 h-px w-full bg-gradient-to-r from-transparent via-border to-transparent;
+}
+
+.section-separator::before {
+  content: '';
+  @apply absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-2 w-2 rounded-full bg-primary/50;
 }

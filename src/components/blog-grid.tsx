@@ -83,8 +83,8 @@ export function BlogGrid({ posts }: BlogGridProps) {
 
       {/* Posts Grid */}
       {paginatedPosts.length === 0 ? (
-        <div className="bg-[oklch(0.18_0.02_260)] rounded-xl border border-[oklch(1_0_0/10%)] p-12 text-center">
-          <p className="text-[oklch(0.6_0.02_260)]">No se encontraron artículos que coincidan con tu búsqueda.</p>
+        <div className="bg-card rounded-xl border border-border p-12 text-center">
+          <p className="text-muted-foreground">No se encontraron artículos que coincidan con tu búsqueda.</p>
         </div>
       ) : (
         <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -111,7 +111,7 @@ export function BlogGrid({ posts }: BlogGridProps) {
             <button
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               disabled={currentPage === 1}
-              className="flex items-center justify-center h-10 px-4 rounded-lg border border-[oklch(1_0_0/15%)] bg-[oklch(0.25_0.02_260)] text-[oklch(0.6_0.02_260)] hover:text-white hover:border-[oklch(0.72_0.15_195)] hover:bg-[oklch(0.22_0.02_260)] transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex items-center justify-center h-10 px-4 rounded-lg border border-border bg-muted text-muted-foreground hover:text-foreground hover:border-primary hover:bg-muted/80 transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <ChevronLeft className="w-4 h-4 mr-1" />
               Anterior
@@ -123,8 +123,8 @@ export function BlogGrid({ posts }: BlogGridProps) {
                 onClick={() => setCurrentPage(page)}
                 className={`flex items-center justify-center w-10 h-10 rounded-lg border font-bold transition-all ${
                   currentPage === page
-                    ? 'border-[oklch(0.72_0.15_195)] bg-[oklch(0.72_0.15_195/10%)] text-[oklch(0.72_0.15_195)] shadow-[0_0_10px_oklch(0.72_0.15_195/20%)]'
-                    : 'border-[oklch(1_0_0/15%)] bg-[oklch(0.25_0.02_260)] text-[oklch(0.6_0.02_260)] hover:text-white hover:border-[oklch(1_0_0/25%)] hover:bg-[oklch(0.22_0.02_260)]'
+                    ? 'border-primary bg-primary/10 text-primary shadow-[0_0_10px_oklch(0.72_0.15_195/20%)]'
+                    : 'border-border bg-muted text-muted-foreground hover:text-foreground hover:border-foreground/30 hover:bg-muted/80'
                 }`}
               >
                 {page}
@@ -134,7 +134,7 @@ export function BlogGrid({ posts }: BlogGridProps) {
             <button
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
-              className="flex items-center justify-center h-10 px-4 rounded-lg border border-[oklch(1_0_0/15%)] bg-[oklch(0.25_0.02_260)] text-[oklch(0.75_0.01_260)] hover:text-white hover:border-[oklch(0.72_0.15_195)] hover:bg-[oklch(0.22_0.02_260)] transition-all font-medium group disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex items-center justify-center h-10 px-4 rounded-lg border border-border bg-muted text-muted-foreground hover:text-foreground hover:border-primary hover:bg-muted/80 transition-all font-medium group disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Siguiente
               <ChevronRight className="w-4 h-4 ml-1" />

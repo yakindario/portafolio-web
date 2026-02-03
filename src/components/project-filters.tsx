@@ -33,7 +33,7 @@ export function ProjectFilters({
               transition-all duration-200 whitespace-nowrap
               ${isActive
                 ? 'bg-primary text-primary-foreground shadow-[0_0_15px_oklch(0.72_0.19_195/30%)]'
-                : 'bg-[oklch(0.18_0.02_260)] border border-[oklch(1_0_0/10%)] text-[oklch(0.7_0.02_260)] hover:text-white hover:border-[oklch(1_0_0/20%)]'
+                : 'bg-card border border-border text-muted-foreground hover:text-foreground hover:border-foreground/20'
               }
             `}
           >

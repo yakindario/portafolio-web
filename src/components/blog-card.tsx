@@ -58,12 +58,12 @@ export function BlogCard({
 
   return (
     <Link href={`/blog/${slug}`} className="group block h-full">
-      <article className="h-full bg-[oklch(0.18_0.02_260)] rounded-xl border border-[oklch(1_0_0/10%)] overflow-hidden hover:-translate-y-1 hover:border-[oklch(0.72_0.15_195)] hover:shadow-[0_0_20px_oklch(0.72_0.15_195/10%)] transition-all duration-200 flex flex-col">
+      <article className="h-full bg-card rounded-xl border border-border overflow-hidden hover:-translate-y-1 hover:border-primary hover:shadow-[0_0_20px_oklch(0.72_0.15_195/10%)] transition-all duration-200 flex flex-col">
         {/* Image Section */}
         <div className="h-48 overflow-hidden relative">
           {/* Category Badge */}
           <div className="absolute top-3 left-3 z-10">
-            <span className={`px-2 py-1 bg-[oklch(0.13_0.02_260/80%)] backdrop-blur text-xs font-mono font-bold rounded border border-[oklch(1_0_0/15%)] ${categoryColor.text}`}>
+            <span className={`px-2 py-1 bg-background/80 backdrop-blur text-xs font-mono font-bold rounded border border-border ${categoryColor.text}`}>
               {category?.toUpperCase() || 'ARTÍCULO'}
             </span>
           </div>
@@ -75,8 +75,8 @@ export function BlogCard({
               style={{ backgroundImage: `url('${image}')` }}
             />
           ) : (
-            <div className="w-full h-full bg-gradient-to-br from-[oklch(0.25_0.03_260)] to-[oklch(0.15_0.02_260)] flex items-center justify-center">
-              <span className="text-[oklch(1_0_0/20%)] text-6xl font-bold">{title?.charAt(0) || 'A'}</span>
+            <div className="w-full h-full bg-gradient-to-br from-muted to-background flex items-center justify-center">
+              <span className="text-muted-foreground/30 text-6xl font-bold">{title?.charAt(0) || 'A'}</span>
             </div>
           )}
         </div>
@@ -84,24 +84,24 @@ export function BlogCard({
         {/* Content Section */}
         <div className="p-5 flex flex-col flex-grow">
           {/* Meta info */}
-          <div className="flex items-center gap-4 text-xs font-mono text-[oklch(0.55_0.02_260)] mb-3">
+          <div className="flex items-center gap-4 text-xs font-mono text-muted-foreground mb-3">
             <span>{formatDate(date)}</span>
             <span>{readingTime} MIN DE LECTURA</span>
           </div>
 
           {/* Title */}
-          <h3 className="text-xl font-bold text-white mb-2 leading-snug group-hover:text-[oklch(0.72_0.15_195)] transition-colors">
+          <h3 className="text-xl font-bold text-foreground mb-2 leading-snug group-hover:text-primary transition-colors">
             {title}
           </h3>
 
           {/* Description */}
-          <p className="text-sm text-[oklch(0.65_0.02_260)] mb-6 line-clamp-3">
+          <p className="text-sm text-muted-foreground mb-6 line-clamp-3">
             {description || excerpt}
           </p>
 
           {/* Read Article Button */}
           <div className="mt-auto">
-            <button className="text-[oklch(0.72_0.15_195)] text-sm font-bold flex items-center gap-1 group-hover:gap-2 transition-all">
+            <button className="text-primary text-sm font-bold flex items-center gap-1 group-hover:gap-2 transition-all">
               Leer Artículo
               <ArrowRight className="w-4 h-4" />
             </button>
