@@ -9,6 +9,9 @@ export const metadata: Metadata = {
     title: 'Blog | Yakindario - Ingeniería de Redes & DevOps',
     description: 'Artículos técnicos, tutoriales y reflexiones sobre redes, desarrollo y arquitectura de sistemas.',
   },
+  alternates: {
+    canonical: '/blog',
+  },
 }
 
 export default async function BlogIndex() {

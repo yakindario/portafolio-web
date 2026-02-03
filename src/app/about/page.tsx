@@ -40,6 +40,9 @@ export const metadata: Metadata = {
     ],
     type: "profile",
   },
+  alternates: {
+    canonical: '/about',
+  },
 };
 
 // Actualizado basado en la sección "Experiencia Profesional" y "Educación" de tu CV [cite: 30-40]

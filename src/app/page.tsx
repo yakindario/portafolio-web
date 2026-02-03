@@ -48,7 +48,10 @@ export const metadata: Metadata = {
         alt: "Yakin Dario - Ingeniero Telemático",
       },
     ],
-}
+  },
+  alternates: {
+    canonical: '/',
+  },
 };
 
 function getCategoryIcon(category?: string): LucideIcon {

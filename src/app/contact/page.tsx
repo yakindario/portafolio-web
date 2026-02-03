@@ -9,6 +9,9 @@ export const metadata: Metadata = {
     title: "Contacto | Yakin Dario - Ingeniero Telemático",
     description: "Ponte en contacto conmigo para proyectos de desarrollo web, consultoría DevOps o colaboraciones.",
   },
+  alternates: {
+    canonical: '/contact',
+  },
 };
 
 export default function ContactPage() {

@@ -29,7 +29,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       card: 'summary_large_image',
       title: frontmatter.title as string,
       description: (frontmatter.description as string) || undefined,
-    }
+    },
+    alternates: {
+      canonical: `/blog/${slug}`,
+    },
   }
 }
 
