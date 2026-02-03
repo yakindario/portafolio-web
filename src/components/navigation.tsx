@@ -9,8 +9,9 @@ import { useState } from "react"
 import { cn } from "@/lib/utils"
 
 const navigation = [
+  { name: "Inicio", href: "/" },
+  { name: "Sobre mi", href: "/about" },
   { name: "Proyectos", href: "/projects" },
-  { name: "Especialidades", href: "/about" },
   { name: "Blog", href: "/blog" },
 ]
 
