@@ -12,19 +12,19 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" })
 const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains-mono" })
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://yakindario.com'),
+  metadataBase: new URL('https://yakindario.me'),
   title: {
     default: "Yakin Dario | Ingeniero Telemático & Desarrollador Web",
     template: "%s | Yakin Dario"
   },
   description: "Portafolio profesional de Yakin Dario. Ingeniero Telemático especializado en DevOps, Desarrollo Full Stack, Next.js, React y Cloud Computing.",
   keywords: ["Desarrollo Web", "Next.js", "React", "DevOps", "Ingeniero Telemático", "Portafolio", "Yakin Dario"],
-  authors: [{ name: "Yakin Dario", url: "https://yakindario.com" }],
+  authors: [{ name: "Yakin Dario", url: "https://yakindario.me" }],
   creator: "Yakin Dario",
   openGraph: {
     type: "website",
     locale: "es_ES",
-    url: "https://yakindario.com",
+    url: "https://yakindario.me",
     title: "Yakin Dario | Ingeniero Telemático & Desarrollador Web",
     description: "Portafolio profesional de Yakin Dario. Ingeniero Telemático especializado en DevOps, Desarrollo Full Stack, Next.js, React y Cloud Computing.",
     siteName: "Yakin Dario Portafolio",

@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     description: "Especialista en desarrollo web, DevOps y soluciones en la nube",
     images: [
       {
-        url: "https://yakindario.com/Yakindario.webp",
+        url: "https://yakindario.me/Yakindario.webp",
         width: 1200,
         height: 630,
         alt: "Yakin Dario - Ingeniero Telemático",
