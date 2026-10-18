@@ -32,7 +32,7 @@ const projects: Project[] = [
     title: 'E-commerce en Laravel',
     description:
       'Plataforma de comercio electrónico con gestión de productos, roles (Spatie), pagos con Mercado Pago y componentes dinámicos en Livewire Volt.',
-    imageType: 'default',
+    imageType: 'ecommerce',
     technologies: [
       { name: 'Laravel', color: 'laravel' },
       { name: 'PHP', color: 'php' },
@@ -77,7 +77,7 @@ const projects: Project[] = [
     title: 'Bootcamp SQL – Análisis de Reservaciones',
     description:
       'Notebook que responde preguntas de negocio sobre una base de datos de reservaciones de hotel usando SQL y Python.',
-    imageType: 'default',
+    imageType: 'sql',
     technologies: [
       { name: 'SQLite', color: 'sqlite' },
       { name: 'SQL', color: 'sql' },
@@ -111,6 +111,13 @@ const projects: Project[] = [
 export default function ProjectsContent() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
 
+  const counts = {
+    all: projects.length,
+    'web-apps': projects.filter((p) => p.category === 'web-apps').length,
+    infrastructure: projects.filter((p) => p.category === 'infrastructure').length,
+    data: projects.filter((p) => p.category === 'data').length,
+  }
+
   const filteredProjects = selectedCategory
     ? projects.filter((p) => p.category === selectedCategory)
     : projects
@@ -139,6 +146,7 @@ export default function ProjectsContent() {
             <ProjectFilters
               selectedCategory={selectedCategory}
               onCategoryChange={setSelectedCategory}
+              counts={counts}
             />
           </div>
 

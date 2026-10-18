@@ -13,7 +13,7 @@ export interface Project {
   title: string
   description: string
   image?: string
-  imageType?: 'default' | 'terminal' | 'phone' | 'network' | 'server' | 'archive'
+  imageType?: 'default' | 'terminal' | 'phone' | 'network' | 'server' | 'archive' | 'ecommerce' | 'sql'
   terminalContent?: string[]
   technologies: Technology[]
   githubUrl: string
@@ -273,6 +273,91 @@ function ArchivePreview() {
   )
 }
 
+// Ecommerce Storefront preview
+function EcommercePreview() {
+  return (
+    <div className="h-48 w-full relative overflow-hidden bg-gradient-to-br from-[#0a0f1d] via-[#151932] to-[#0a0f1d] border-b border-border p-4 flex flex-col justify-between">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-1.5">
+          <span className="h-2 w-2 rounded-full bg-red-400" />
+          <span className="h-2 w-2 rounded-full bg-amber-400" />
+          <span className="h-2 w-2 rounded-full bg-emerald-400" />
+          <span className="ml-2 font-mono text-[9px] text-slate-400 uppercase tracking-widest">
+            Laravel Livewire • Store
+          </span>
+        </div>
+        <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[10px] font-bold text-emerald-400">
+          Mercado Pago API
+        </span>
+      </div>
+
+      <div className="relative rounded-xl border border-white/10 bg-white/5 backdrop-blur-md p-3 shadow-lg group-hover:border-primary/40 transition-colors">
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2.5">
+            <div className="h-9 w-9 rounded-lg bg-primary/20 border border-primary/30 flex items-center justify-center text-primary font-bold text-sm">
+              🛍️
+            </div>
+            <div>
+              <p className="text-xs font-bold text-slate-100">Orden #2048</p>
+              <p className="text-[10px] text-slate-400">Livewire Volt Component</p>
+            </div>
+          </div>
+          <div className="text-right">
+            <span className="text-xs font-bold text-emerald-400">$1,499.00</span>
+            <span className="block text-[9px] text-slate-400">Aprobado</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex items-center justify-between text-[10px] text-slate-400 font-mono">
+        <span className="flex items-center gap-1">
+          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+          Live Checkout
+        </span>
+        <span className="text-primary/90 font-semibold">Spatie Roles &amp; Auth</span>
+      </div>
+    </div>
+  )
+}
+
+// SQL & Data Analytics preview
+function SqlPreview() {
+  return (
+    <div className="h-48 w-full relative flex flex-col bg-[#0b1015] border-b border-border overflow-hidden">
+      <div className="h-7 bg-[#131b23] border-b border-white/5 flex items-center px-3 justify-between">
+        <div className="flex items-center gap-1.5">
+          <span className="h-2 w-2 rounded-full bg-blue-400" />
+          <span className="font-mono text-[9px] text-slate-400">query.sql — SQLite + Pandas</span>
+        </div>
+        <span className="text-[9px] font-mono text-emerald-400 bg-emerald-500/10 px-1.5 rounded">200 OK (12ms)</span>
+      </div>
+
+      <div className="px-3 py-2 font-mono text-[10px] bg-black/40 border-b border-white/5 text-slate-300 leading-tight">
+        <span className="text-purple-400">SELECT</span> room_type, <span className="text-purple-400">COUNT</span>(*) <span className="text-purple-400">AS</span> total, <span className="text-purple-400">SUM</span>(revenue)<br />
+        <span className="text-purple-400">FROM</span> bookings <span className="text-purple-400">GROUP BY</span> 1 <span className="text-purple-400">ORDER BY</span> 3 <span className="text-purple-400">DESC</span>;
+      </div>
+
+      <div className="flex-1 px-3 py-1 font-mono text-[9px] text-slate-400">
+        <div className="grid grid-cols-3 py-1 border-b border-white/10 font-bold text-slate-300">
+          <span>ROOM</span>
+          <span className="text-center">TOTAL</span>
+          <span className="text-right">REVENUE</span>
+        </div>
+        <div className="grid grid-cols-3 py-1 text-slate-400 border-b border-white/5">
+          <span className="text-primary truncate">Deluxe Suite</span>
+          <span className="text-center text-slate-200">142</span>
+          <span className="text-right text-emerald-400 font-semibold">$42,600</span>
+        </div>
+        <div className="grid grid-cols-3 py-1 text-slate-400">
+          <span className="text-primary truncate">Ocean View</span>
+          <span className="text-center text-slate-200">98</span>
+          <span className="text-right text-emerald-400 font-semibold">$29,400</span>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export function ProjectCard({ project }: { project: Project }) {
   const { title, description, technologies, githubUrl, liveUrl, docsUrl, featured, imageType, terminalContent, image, icon } = project
 
@@ -287,6 +372,10 @@ export function ProjectCard({ project }: { project: Project }) {
         return <NetworkPreview />
       case 'archive':
         return <ArchivePreview />
+      case 'ecommerce':
+        return <EcommercePreview />
+      case 'sql':
+        return <SqlPreview />
       default:
         return <ImagePreview image={image} alt={title} />
     }

@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge'
 import { Card } from '@/components/ui/card'
 import { ArrowLeft, Calendar, Clock, Tag, User, ArrowRight } from 'lucide-react'
 import { TableOfContents } from '@/components/table-of-contents'
+import { ReadingProgressBar } from '@/components/reading-progress-bar'
 
 type Props = { params: Promise<{ slug: string }> }
 
@@ -63,8 +64,10 @@ export default async function PostPage({ params }: Props) {
   const description = String(frontmatter.description || '')
 
   return (
-    <div className="flex max-w-[1440px] mx-auto">
-      <article className="container max-w-4xl mx-auto px-4 py-12 flex-1 min-w-0">
+    <>
+      <ReadingProgressBar />
+      <div className="flex max-w-[1440px] mx-auto">
+        <article className="container max-w-4xl mx-auto px-4 py-12 flex-1 min-w-0">
       
       {/* Navegación Superior */}
       <div className="mb-8">
@@ -189,5 +192,6 @@ export default async function PostPage({ params }: Props) {
       {/* Table of Contents Sidebar */}
       <TableOfContents />
     </div>
+    </>
   )
 }
