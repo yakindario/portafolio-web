@@ -3,7 +3,7 @@ import { getAllPosts } from '@/lib/blog'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const posts = await getAllPosts()
-  const baseUrl = 'https://yakindario.com'
+  const baseUrl = 'https://yakindario.me'
 
   const blogPosts = posts.map((post) => ({
     url: `${baseUrl}/blog/${post.slug}`,

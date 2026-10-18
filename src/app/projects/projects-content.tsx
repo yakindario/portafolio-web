@@ -22,7 +22,7 @@ const projects: Project[] = [
       { name: 'Vercel', color: 'vercel' },
     ],
     githubUrl: 'https://github.com/yakindario/portafolio-web',
-    liveUrl: 'https://yakindario.com',
+    liveUrl: 'https://yakindario.me',
     featured: true,
     category: 'web-apps',
     icon: 'hub',

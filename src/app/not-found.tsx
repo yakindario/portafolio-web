@@ -25,7 +25,7 @@ export default function NotFound() {
 
       {/* Terminal-style hint */}
       <div className="mt-8 rounded-lg border border-border bg-muted/50 px-6 py-3 font-mono text-sm text-muted-foreground">
-        <span className="text-primary">$</span> curl -I yakindario.com/...
+        <span className="text-primary">$</span> curl -I yakindario.me/...
         <br />
         <span className="text-destructive">HTTP/1.1 404 Not Found</span>
       </div>

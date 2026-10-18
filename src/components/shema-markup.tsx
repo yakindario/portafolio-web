@@ -7,7 +7,7 @@ export function PersonSchema() {
           "@context": "https://schema.org",
           "@type": "Person",
           name: "Yakin Dario",
-          url: "https://yakindario.com",
+          url: "https://yakindario.me",
           jobTitle: "Ingeniero Telemático",
           knowsAbout: [
             "DevOps", 
@@ -18,7 +18,7 @@ export function PersonSchema() {
             "AWS", 
             "Azure"
           ],
-          image: "https://yakindario.com/Yakindario.webp",
+          image: "https://yakindario.me/Yakindario.webp",
           sameAs: [
             "https://github.com/yakindario",
             "https://www.linkedin.com/in/yakindario/",
@@ -87,7 +87,7 @@ export function ContactPageSchema() {
             "name": "Yakin Dario",
             "jobTitle": "Ingeniero Telemático | Especialista DevOps | Desarrollador Full Stack",
             "email": "yakindario@gmail.com", // Reemplaza con tu email real
-            "url": "https://yakindario.com",
+            "url": "https://yakindario.me",
             "sameAs": [
               "https://github.com/yakindario",
               "https://www.linkedin.com/in/yakindario/",

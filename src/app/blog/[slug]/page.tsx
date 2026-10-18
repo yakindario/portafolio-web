@@ -2,6 +2,7 @@ import MDXClient from '@/components/mdx-client'
 import { getPostBySlug } from '@/lib/blog'
 import Link from 'next/link'
 import { Metadata } from 'next'
+import { notFound } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card } from '@/components/ui/card'
@@ -12,33 +13,47 @@ type Props = { params: Promise<{ slug: string }> }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
-  const { frontmatter } = await getPostBySlug(slug)
+  try {
+    const { frontmatter } = await getPostBySlug(slug)
 
-  return {
-    title: `${frontmatter.title} | Yakin Dario`,
-    description: (frontmatter.description as string) || `Lee sobre ${frontmatter.title}`,
-    openGraph: {
-      title: frontmatter.title as string,
-      description: (frontmatter.description as string) || undefined,
-      type: 'article',
-      publishedTime: frontmatter.date as string,
-      authors: ['Yakin Dario'],
-      tags: (frontmatter.tags as string[]) || [],
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: frontmatter.title as string,
-      description: (frontmatter.description as string) || undefined,
-    },
-    alternates: {
-      canonical: `/blog/${slug}`,
-    },
+    return {
+      title: `${frontmatter.title} | Yakin Dario`,
+      description: (frontmatter.description as string) || `Lee sobre ${frontmatter.title}`,
+      openGraph: {
+        title: frontmatter.title as string,
+        description: (frontmatter.description as string) || undefined,
+        type: 'article',
+        publishedTime: frontmatter.date as string,
+        authors: ['Yakin Dario'],
+        tags: (frontmatter.tags as string[]) || [],
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: frontmatter.title as string,
+        description: (frontmatter.description as string) || undefined,
+      },
+      alternates: {
+        canonical: `/blog/${slug}`,
+      },
+    }
+  } catch {
+    return {
+      title: 'Post no encontrado | Yakin Dario',
+    }
   }
 }
 
 export default async function PostPage({ params }: Props) {
   const { slug } = await params
-  const { frontmatter, mdxSource } = await getPostBySlug(slug)
+  let frontmatter: Record<string, unknown>
+  let mdxSource
+  try {
+    const post = await getPostBySlug(slug)
+    frontmatter = post.frontmatter
+    mdxSource = post.mdxSource
+  } catch {
+    notFound()
+  }
   
   const title = String(frontmatter.title || '')
   const date = String(frontmatter.date || '')
