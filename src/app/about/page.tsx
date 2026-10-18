@@ -9,6 +9,7 @@ import {
   MapPin,
   CheckCircle,
   ArrowRight,
+  FileDown,
 } from "lucide-react";
 import type { Metadata } from "next";
 import { AboutPageSchema } from "@/components/schema-markup";
@@ -171,6 +172,18 @@ export default function AboutPage() {
                   <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-tighter">Email</span>
                 </a>
               </div>
+
+              {/* Download CV Button */}
+              <Button asChild className="w-full rounded-xl gap-2 shadow-md shadow-primary/20 font-semibold">
+                <a
+                  href="https://cdn.yakindario.me/cv.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <FileDown className="h-4 w-4" />
+                  Descargar CV (PDF)
+                </a>
+              </Button>
             </div>
           </aside>
 
