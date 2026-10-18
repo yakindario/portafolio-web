@@ -11,7 +11,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import type { Metadata } from "next";
-import { AboutPageSchema } from "@/components/shema-markup";
+import { AboutPageSchema } from "@/components/schema-markup";
 
 export const metadata: Metadata = {
   title: "Sobre mí | Yakin Dario - Ingeniero Telemático y DevOps",
@@ -190,8 +190,7 @@ export default function AboutPage() {
                 Fusionando la solidez de la infraestructura de telecomunicaciones con la agilidad del desarrollo web moderno y DevOps.
               </p>
             </section>
-
-            [cite_start]{/* 01. The Journey - Actualizado con "Perfil Profesional" del CV [cite: 4-7] */}
+            {/* 01. The Journey */}
             <section className="flex flex-col gap-6">
               <h2 className="text-xl font-bold flex items-center gap-3">
                 <span className="text-primary font-mono text-sm">01.</span>

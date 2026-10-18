@@ -1,0 +1,143 @@
+---
+title: "Kubernetes para principiantes: De Docker a la Orquestación"
+date: "2026-01-15"
+description: "Guía práctica para entender la arquitectura de Kubernetes: Nodos, Pods, Deployments y Services explicados con ejemplos reales y manifiestos YAML."
+category: "DevOps"
+tags: ["kubernetes", "docker", "devops", "cloud", "containers"]
+image: "https://images.unsplash.com/photo-1667372393119-3d4c48d07fc9?w=800&h=400&fit=crop"
+---
+
+## Introducción a la Orquestación de Contenedores
+
+Cuando comenzamos con Docker, ejecutar `docker run` en nuestro entorno local se siente rápido y sencillo. Sin embargo, en entornos de producción surgen desafíos reales:
+
+- ¿Qué ocurre si un contenedor colapsa a las 3:00 AM?
+- ¿Cómo escalamos de 1 a 10 instancias cuando aumenta el tráfico?
+- ¿Cómo realizamos despliegues sin tiempo de inactividad (Zero-Downtime)?
+- ¿Cómo gestionamos el balanceo de carga interno entre microservicios?
+
+Aquí es donde entra **Kubernetes (K8s)**: una plataforma de código abierto desarrollada originalmente por Google para automatizar el despliegue, escalado y gestión de aplicaciones en contenedores.
+
+---
+
+## 1. Conceptos Fundamentales de Kubernetes
+
+Para dominar Kubernetes no necesitas memorizar toda la API desde el primer día, sino comprender con claridad su modelo mental:
+
+### 1.1. El Cluster: Control Plane y Nodos Workers
+
+Un cluster de Kubernetes está compuesto por dos capas principales:
+
+1. **Control Plane (Plano de Control):** El cerebro del cluster. Incluye el `kube-apiserver`, `etcd` (almacén clave-valor del estado), `kube-scheduler` (decide dónde correr los pods) y el `kube-controller-manager`.
+2. **Worker Nodes (Nodos de Trabajo):** Las máquinas físicas o virtuales que realmente ejecutan tus contenedores. Cada nodo cuenta con `kubelet`, `kube-proxy` y el runtime de contenedores (como `containerd`).
+
+### 1.2. Pod: La Unidad Mínima de Ejecución
+
+A diferencia de lo que muchos piensan, en Kubernetes no desplegamos contenedores directamente. Desplegamos **Pods**.
+
+Un Pod puede contener uno o más contenedores estrechamente acoplados que comparten la misma dirección IP, espacio de red y volúmenes de almacenamiento.
+
+---
+
+## 2. Creando tu Primer Deployment
+
+Un **Deployment** se encarga de declarar el estado deseado de tu aplicación: cuántas réplicas necesitas, qué imagen utilizar y cómo aplicar actualizaciones progresivas (*rolling updates*).
+
+A continuación, un ejemplo de manifiesto YAML para una aplicación web:
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mi-app-web
+  labels:
+    app: mi-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: mi-app
+  template:
+    metadata:
+      labels:
+        app: mi-app
+    spec:
+      containers:
+      - name: web
+        image: nginx:alpine
+        ports:
+        - containerPort: 80
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "250m"
+          requests:
+            memory: "64Mi"
+            cpu: "100m"
+```
+
+<InfoBox type="tip" title="Buenas Prácticas de Producción">
+Siempre define límites (`limits`) y peticiones (`requests`) de CPU y Memoria en tus contenedores. Esto evita que un Pod consuma todos los recursos del nodo y afecte a otros servicios.
+</InfoBox>
+
+---
+
+## 3. Exponiendo tu Aplicación con Services
+
+Dado que los Pods son efímeros y sus direcciones IP cambian cada vez que se recrean, necesitamos un mecanismo estable para comunicarnos con ellos: el recurso **Service**.
+
+Existen varios tipos de Service:
+
+| Tipo | Propósito |
+|---|---|
+| **ClusterIP** | (Por defecto) Expone el servicio únicamente dentro del cluster. |
+| **NodePort** | Abre un puerto estático (30000-32767) en cada nodo del cluster. |
+| **LoadBalancer** | Provisiona un balanceador de carga externo en tu proveedor Cloud (AWS, Azure, DigitalOcean). |
+
+Ejemplo de un Service tipo ClusterIP:
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: mi-app-service
+spec:
+  type: ClusterIP
+  selector:
+    app: mi-app
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+```
+
+---
+
+## 4. Comandos Esenciales de `kubectl`
+
+La herramienta CLI principal para interactuar con tu cluster es `kubectl`. Aquí tienes los comandos indispensables para el día a día:
+
+```bash
+# Ver el estado de todos los pods en el namespace actual
+kubectl get pods
+
+# Obtener información detallada de un pod específico
+kubectl describe pod <nombre-del-pod>
+
+# Aplicar o actualizar un manifiesto
+kubectl apply -f deployment.yaml
+
+# Ver logs en tiempo real de una aplicación
+kubectl logs -f deployment/mi-app-web
+
+# Escalar manualmente el número de réplicas
+kubectl scale deployment mi-app-web --replicas=5
+```
+
+---
+
+## Conclusión
+
+Kubernetes puede parecer abrumador al inicio por su vocabulario y amplitud, pero una vez que dominas la relación entre **Pods**, **Deployments** y **Services**, tienes en tus manos una de las habilidades más demandadas en la ingeniería de software y DevOps moderno.
+
+En los siguientes artículos exploraremos cómo automatizar despliegues continuos hacia Kubernetes usando **GitHub Actions y Helm Charts**.

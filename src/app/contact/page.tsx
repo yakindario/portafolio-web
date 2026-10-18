@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import ContactContent from "./contact-content";
-import { ContactPageSchema } from "@/components/shema-markup";
+import { ContactPageSchema } from "@/components/schema-markup";
 
 export const metadata: Metadata = {
   title: "Contacto | Yakin Dario - Ingeniero Telemático",

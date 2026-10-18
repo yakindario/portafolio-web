@@ -10,13 +10,16 @@ export function PersonSchema() {
           url: "https://yakindario.me",
           jobTitle: "Ingeniero Telemático",
           knowsAbout: [
-            "DevOps", 
-            "Desarrollo Full Stack", 
-            "Laravel", 
+            "DevOps",
+            "Desarrollo Full Stack",
+            "Laravel",
             "React",
-            "Next.js", 
-            "AWS", 
-            "Azure"
+            "Next.js",
+            "AWS",
+            "Azure",
+            "Docker",
+            "Kubernetes",
+            "Redes y Telecomunicaciones"
           ],
           image: "https://yakindario.me/Yakindario.webp",
           sameAs: [
@@ -30,8 +33,6 @@ export function PersonSchema() {
   );
 }
 
-// Añadir a tu archivo de esquemas o crear uno nuevo
-
 export function AboutPageSchema() {
   return (
     <script
@@ -40,29 +41,38 @@ export function AboutPageSchema() {
         __html: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "ProfilePage",
-          "mainEntity": {
+          mainEntity: {
             "@type": "Person",
-            "name": "Yakin Dario",
-            "jobTitle": "Ingeniero Telemático",
-            "description": "Ingeniero Telemático especializado en DevOps y desarrollo Full Stack con experiencia en Laravel, React, Next.js, AWS y Azure.",
-            "alumniOf": [
+            name: "Yakin Dario",
+            jobTitle: "Ingeniero Telemático",
+            description: "Ingeniero Telemático especializado en DevOps y desarrollo Full Stack con experiencia en Laravel, React, Next.js, AWS y Azure.",
+            alumniOf: [
               {
                 "@type": "CollegeOrUniversity",
-                "name": "[Universidad de Gudalajara]",
-                "sameAs": "[https://www.udg.mx/]"
+                name: "Universidad de Guadalajara",
+                sameAs: "https://www.udg.mx/"
               }
             ],
-            "knowsAbout": [
-              "DevOps", "Laravel", "React", "Next.js", 
-              "Docker", "Kubernetes", "AWS", "Azure"
+            knowsAbout: [
+              "DevOps",
+              "Laravel",
+              "React",
+              "Next.js",
+              "Docker",
+              "Kubernetes",
+              "AWS",
+              "Azure",
+              "Infraestructura de Redes",
+              "MikroTik",
+              "Sistemas CCTV"
             ],
-            "workLocation": {
+            workLocation: {
               "@type": "Place",
-              "address": {
+              address: {
                 "@type": "PostalAddress",
-                "addressLocality": "Puerto Vallarta",
-                "addressRegion": "Jalisco",
-                "addressCountry": "MX"
+                addressLocality: "Puerto Vallarta",
+                addressRegion: "Jalisco",
+                addressCountry: "MX"
               }
             }
           }
@@ -80,15 +90,15 @@ export function ContactPageSchema() {
         __html: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "ContactPage",
-          "name": "Página de contacto de Yakin Dario",
-          "description": "Contacta con Yakin Dario para proyectos de desarrollo, consultoría DevOps o colaboraciones profesionales.",
-          "mainEntity": {
+          name: "Página de contacto de Yakin Dario",
+          description: "Contacta con Yakin Dario para proyectos de desarrollo, consultoría DevOps o colaboraciones profesionales.",
+          mainEntity: {
             "@type": "Person",
-            "name": "Yakin Dario",
-            "jobTitle": "Ingeniero Telemático | Especialista DevOps | Desarrollador Full Stack",
-            "email": "yakindario@gmail.com", // Reemplaza con tu email real
-            "url": "https://yakindario.me",
-            "sameAs": [
+            name: "Yakin Dario",
+            jobTitle: "Ingeniero Telemático | Especialista DevOps | Desarrollador Full Stack",
+            email: "yakindario@gmail.com",
+            url: "https://yakindario.me",
+            sameAs: [
               "https://github.com/yakindario",
               "https://www.linkedin.com/in/yakindario/",
               "https://x.com/yakindario"

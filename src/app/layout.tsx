@@ -5,7 +5,7 @@ import "./globals.css"
 import { Navigation } from "@/components/navigation"
 import { Footer } from "@/components/footer"
 import { ThemeProvider } from "@/components/theme-provider"
-import { PersonSchema } from "@/components/shema-markup"
+import { PersonSchema } from "@/components/schema-markup"
 
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" })
