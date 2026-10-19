@@ -1,0 +1,92 @@
+---
+title: "Creando un Blog Técnico con Next.js y MDX"
+date: "2025-11-30"
+description: "Cómo combinar Next.js App Router, Tailwind CSS y next-mdx-remote para escribir artículos técnicos interactivos con soporte para componentes React."
+category: "Development"
+tags: ["nextjs", "react", "mdx", "tailwind", "web"]
+image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&h=400&fit=crop"
+---
+
+## ¿Por qué elegir MDX para un Portafolio Técnico?
+
+Para desarrolladores e ingenieros de software, Markdown es el formato estándar de documentación. Sin embargo, en un blog técnico a menudo necesitamos más que solo texto con formato:
+
+- Bloques de código interactivos con botón para copiar.
+- Cajas de advertencia o notas (*callouts / infoboxes*).
+- Gráficos interactivos, diagramas o demostraciones en vivo.
+
+**MDX** resuelve esto uniendo lo mejor de dos mundos: la simplicidad de la sintaxis Markdown con la potencia reactiva de los componentes de **React**.
+
+---
+
+## 1. Arquitectura del Blog en Next.js App Router
+
+En esta implementación utilizamos el **App Router de Next.js** junto con `gray-matter` para el parseo del frontmatter (título, fecha, categorías) y `next-mdx-remote` para serializar y renderizar el contenido dinámicamente en el servidor:
+
+```
+src/
+├── content/
+│   └── blog/
+│       ├── mi-articulo.mdx
+│       └── otro-post.mdx
+├── app/
+│   └── blog/
+│       ├── page.tsx          # Índice de artículos con filtros
+│       └── [slug]/
+│           └── page.tsx      # Vista dinámica de cada artículo
+└── components/
+    └── mdx-client.tsx        # Componentes personalizados permitidos en MDX
+```
+
+---
+
+## 2. Inyectando Componentes Personalizados
+
+Gracias a `next-mdx-remote`, podemos definir componentes que se sustituyan de manera natural durante el renderizado. Por ejemplo, transformar automáticamente los bloques `<InfoBox>` en llamadas visuales estilizadas con Tailwind CSS:
+
+```tsx
+// src/components/mdx-client.tsx
+import { Info, Lightbulb } from 'lucide-react'
+
+export function InfoBox({ 
+  children, 
+  title = "Nota", 
+  type = "info" 
+}: { 
+  children: React.ReactNode; 
+  title?: string; 
+  type?: "info" | "tip" 
+}) {
+  const Icon = type === "tip" ? Lightbulb : Info
+  return (
+    <div className="p-4 rounded-lg border-l-4 bg-primary/10 border-l-primary my-6">
+      <div className="flex gap-3">
+        <Icon className="h-5 w-5 text-primary shrink-0" />
+        <div>
+          <p className="font-bold text-sm mb-1">{title}</p>
+          <div className="text-sm text-muted-foreground">{children}</div>
+        </div>
+      </div>
+    </div>
+  )
+}
+```
+
+Ahora en cualquier archivo `.mdx`, basta con escribir:
+
+```html
+<InfoBox type="tip" title="Consejo de Optimización">
+  Configura la propiedad generateStaticParams para generar estáticamente
+  las páginas durante el build y reducir la latencia al mínimo.
+</InfoBox>
+```
+
+<InfoBox type="tip" title="Rendimiento con Turbopack">
+Al procesar los archivos MDX localmente en tiempo de compilación (`next build`), los artículos se sirven como HTML estático puro, logrando tiempos de carga casi instantáneos y un SEO inmejorable.
+</InfoBox>
+
+---
+
+## Conclusión
+
+Integrar MDX en Next.js permite mantener tus artículos organizados como archivos de texto en tu repositorio Git (con control de versiones completo) mientras ofreces una experiencia de lectura interactiva, moderna y altamente profesional.

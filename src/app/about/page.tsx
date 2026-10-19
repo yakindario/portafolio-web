@@ -9,9 +9,11 @@ import {
   MapPin,
   CheckCircle,
   ArrowRight,
+  FileDown,
+  Award,
 } from "lucide-react";
 import type { Metadata } from "next";
-import { AboutPageSchema } from "@/components/shema-markup";
+import { AboutPageSchema } from "@/components/schema-markup";
 
 export const metadata: Metadata = {
   title: "Sobre mí | Yakin Dario - Ingeniero Telemático y DevOps",
@@ -99,6 +101,37 @@ const techStack = {
   backend: ["PHP", "Laravel", "MySQL", "PostgreSQL", "Python", "Node.js"],
 };
 
+const certifications = [
+  {
+    title: "AWS re/Start – Fundamentos de Cloud",
+    issuer: "Amazon Web Services",
+    year: "2024",
+    skills: ["Cloud Architecture", "AWS EC2/S3/VPC", "Linux Administration", "Networking"],
+    badgeColor: "bg-amber-500/10 text-amber-500 border-amber-500/20",
+  },
+  {
+    title: "Microsoft Certified: Azure Fundamentals (AZ-900)",
+    issuer: "Microsoft",
+    year: "2024",
+    skills: ["Azure Cloud", "Seguridad Cloud", "Gobernanza", "Servicios de Nube"],
+    badgeColor: "bg-blue-500/10 text-blue-500 border-blue-500/20",
+  },
+  {
+    title: "Bootcamp DevOps & CI/CD",
+    issuer: "Código Facilito",
+    year: "2024",
+    skills: ["Docker", "Kubernetes", "GitHub Actions", "CI/CD Pipelines", "Terraform"],
+    badgeColor: "bg-violet-500/10 text-violet-400 border-violet-500/20",
+  },
+  {
+    title: "Bootcamp PHP & Laravel",
+    issuer: "Código Facilito",
+    year: "2024",
+    skills: ["Laravel 11", "Livewire Volt", "REST APIs", "Spatie Roles", "Mercado Pago"],
+    badgeColor: "bg-red-500/10 text-red-500 border-red-500/20",
+  },
+];
+
 export default function AboutPage() {
   return (
     <>
@@ -171,6 +204,18 @@ export default function AboutPage() {
                   <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-tighter">Email</span>
                 </a>
               </div>
+
+              {/* Download CV Button */}
+              <Button asChild className="w-full rounded-xl gap-2 shadow-md shadow-primary/20 font-semibold">
+                <a
+                  href="https://cdn.yakindario.me/cv.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <FileDown className="h-4 w-4" />
+                  Descargar CV (PDF)
+                </a>
+              </Button>
             </div>
           </aside>
 
@@ -190,8 +235,7 @@ export default function AboutPage() {
                 Fusionando la solidez de la infraestructura de telecomunicaciones con la agilidad del desarrollo web moderno y DevOps.
               </p>
             </section>
-
-            [cite_start]{/* 01. The Journey - Actualizado con "Perfil Profesional" del CV [cite: 4-7] */}
+            {/* 01. The Journey */}
             <section className="flex flex-col gap-6">
               <h2 className="text-xl font-bold flex items-center gap-3">
                 <span className="text-primary font-mono text-sm">01.</span>
@@ -242,10 +286,60 @@ export default function AboutPage() {
               </div>
             </section>
 
-            {/* 03. Technical Philosophy */}
+            {/* 03. Certificaciones & Credenciales */}
             <section className="flex flex-col gap-6">
               <h2 className="text-xl font-bold flex items-center gap-3">
                 <span className="text-primary font-mono text-sm">03.</span>
+                Certificaciones &amp; Credenciales
+              </h2>
+              <div className="grid gap-4 sm:grid-cols-2">
+                {certifications.map((cert, i) => (
+                  <div
+                    key={i}
+                    className="flex flex-col justify-between p-5 rounded-2xl border border-border bg-card/60 backdrop-blur-sm transition-all duration-300 hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5"
+                  >
+                    <div className="space-y-3">
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="flex items-center gap-2.5">
+                          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                            <Award className="h-5 w-5" />
+                          </span>
+                          <div>
+                            <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-widest block">
+                              {cert.issuer}
+                            </span>
+                            <span className="font-mono text-[10px] text-primary font-semibold">
+                              {cert.year}
+                            </span>
+                          </div>
+                        </div>
+                        <Badge className={`${cert.badgeColor} border text-[10px] font-bold uppercase`}>
+                          Acreditado
+                        </Badge>
+                      </div>
+                      <h3 className="font-bold text-sm text-foreground leading-snug">
+                        {cert.title}
+                      </h3>
+                    </div>
+                    <div className="flex flex-wrap gap-1.5 pt-4 mt-4 border-t border-border/50">
+                      {cert.skills.map((skill) => (
+                        <span
+                          key={skill}
+                          className="px-2 py-0.5 rounded-md bg-secondary/80 text-[10px] font-medium text-muted-foreground"
+                        >
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            {/* 04. Technical Philosophy */}
+            <section className="flex flex-col gap-6">
+              <h2 className="text-xl font-bold flex items-center gap-3">
+                <span className="text-primary font-mono text-sm">04.</span>
                 Filosofía Técnica
               </h2>
               <div className="flex flex-col gap-4">
@@ -264,10 +358,10 @@ export default function AboutPage() {
               </div>
             </section>
 
-            {/* 04. Technical Arsenal */}
+            {/* 05. Technical Arsenal */}
             <section className="flex flex-col gap-8">
               <h2 className="text-xl font-bold flex items-center gap-3">
-                <span className="text-primary font-mono text-sm">04.</span>
+                <span className="text-primary font-mono text-sm">05.</span>
                 Arsenal Técnico
               </h2>
               <div className="space-y-6">

@@ -18,11 +18,13 @@ export function TableOfContents() {
     if (!article) return
 
     const elements = article.querySelectorAll('h2, h3')
-    const headingElements = Array.from(elements).map((element) => ({
-      id: element.id,
-      text: element.textContent || '',
-      level: parseInt(element.tagName.substring(1)),
-    }))
+    const headingElements = Array.from(elements)
+      .map((element) => ({
+        id: element.id,
+        text: (element.textContent || '').replace(/^#\s*/, '').trim(),
+        level: parseInt(element.tagName.substring(1)),
+      }))
+      .filter((h) => h.id && h.text)
 
     setHeadings(headingElements)
 

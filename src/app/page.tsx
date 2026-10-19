@@ -8,6 +8,7 @@ import {
   Braces,
   CloudCog,
   Code,
+  FileDown,
   FlaskConical,
   Gauge,
   Github,
@@ -133,7 +134,7 @@ export default async function HomePage() {
                 </p>
               </div>
 
-              <div className="flex flex-col items-center gap-4 sm:flex-row lg:justify-start">
+              <div className="flex flex-col items-center gap-3 sm:flex-row lg:justify-start">
                 <Button asChild size="lg" className="rounded-full px-6 shadow-lg shadow-primary/20 transition-all duration-300 hover:shadow-xl hover:shadow-primary/30">
                   <Link href="/projects">
                     Ver Proyectos <ArrowRight className="ml-2 h-4 w-4" />
@@ -141,6 +142,16 @@ export default async function HomePage() {
                 </Button>
                 <Button variant="outline" size="lg" className="rounded-full px-6" asChild>
                   <Link href="/contact">Contactar</Link>
+                </Button>
+                <Button variant="secondary" size="lg" className="rounded-full px-6 border border-border hover:border-primary/40 gap-2" asChild>
+                  <a
+                    href="https://cdn.yakindario.me/cv.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <FileDown className="h-4 w-4 text-primary" />
+                    CV (PDF)
+                  </a>
                 </Button>
               </div>
 
