@@ -1,8 +1,20 @@
 "use client"
+
 import Image from 'next/image'
 import { MDXRemote } from 'next-mdx-remote'
-import { Info, Lightbulb, Copy, Check, BookOpen } from 'lucide-react'
+import {
+  Info,
+  Lightbulb,
+  Copy,
+  Check,
+  BookOpen,
+  AlertTriangle,
+  AlertOctagon,
+  CheckCircle2,
+  ChevronRight,
+} from 'lucide-react'
 import React, { useState, useRef } from 'react'
+import { Badge } from '@/components/ui/badge'
 
 interface MDXComponents {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -134,25 +146,157 @@ function CodeBlock({ children, className, filename, ...props }: React.HTMLAttrib
 }
 
 
-// Info callout box
-function InfoBox({ children, title = "Nota", type = "info" }: { children: React.ReactNode; title?: string; type?: "info" | "tip" }) {
-  const Icon = type === "tip" ? Lightbulb : Info
-  const colorClasses = type === "tip" 
-    ? "bg-amber-900/10 border-l-amber-500 text-amber-500"
-    : "bg-primary/10 border-l-primary text-primary"
-  
+// Callout box with multiple alert variants
+interface CalloutProps {
+  children: React.ReactNode
+  title?: string
+  type?: 'info' | 'tip' | 'warning' | 'success' | 'error'
+}
+
+function Callout({ children, title, type = 'info' }: CalloutProps) {
+  const configs = {
+    info: {
+      defaultTitle: 'Información',
+      icon: Info,
+      classes: 'bg-primary/10 border-l-primary text-primary',
+      iconColor: 'text-primary',
+    },
+    tip: {
+      defaultTitle: 'Consejo',
+      icon: Lightbulb,
+      classes: 'bg-cyan-500/10 border-l-cyan-500 text-cyan-500',
+      iconColor: 'text-cyan-500',
+    },
+    warning: {
+      defaultTitle: 'Advertencia',
+      icon: AlertTriangle,
+      classes: 'bg-amber-500/10 border-l-amber-500 text-amber-500',
+      iconColor: 'text-amber-500',
+    },
+    success: {
+      defaultTitle: 'Éxito / Resultado',
+      icon: CheckCircle2,
+      classes: 'bg-emerald-500/10 border-l-emerald-500 text-emerald-500',
+      iconColor: 'text-emerald-500',
+    },
+    error: {
+      defaultTitle: 'Precaución / Peligro',
+      icon: AlertOctagon,
+      classes: 'bg-red-500/10 border-l-red-500 text-red-500',
+      iconColor: 'text-red-500',
+    },
+  }
+
+  const config = configs[type] || configs.info
+  const Icon = config.icon
+
   return (
-    <div className={`p-4 rounded-lg border-l-4 ${colorClasses} my-6`}>
+    <div className={`p-4 rounded-xl border-l-4 ${config.classes} my-6 backdrop-blur-sm shadow-sm`}>
       <div className="flex gap-3">
-        <Icon className="h-5 w-5 mt-0.5 flex-shrink-0" />
-        <div>
-          <p className="font-bold text-foreground text-sm mb-1">{title}</p>
+        <Icon className={`h-5 w-5 mt-0.5 flex-shrink-0 ${config.iconColor}`} />
+        <div className="flex-1 min-w-0">
+          <p className="font-bold text-foreground text-sm mb-1">{title || config.defaultTitle}</p>
           <div className="text-muted-foreground text-sm leading-relaxed prose-sm">{children}</div>
         </div>
       </div>
     </div>
   )
 }
+
+function InfoBox({ children, title, type = 'info' }: { children: React.ReactNode; title?: string; type?: 'info' | 'tip' }) {
+  return <Callout type={type} title={title}>{children}</Callout>
+}
+
+function WarningBox({ children, title }: { children: React.ReactNode; title?: string }) {
+  return <Callout type="warning" title={title}>{children}</Callout>
+}
+
+function SuccessBox({ children, title }: { children: React.ReactNode; title?: string }) {
+  return <Callout type="success" title={title}>{children}</Callout>
+}
+
+function TipBox({ children, title }: { children: React.ReactNode; title?: string }) {
+  return <Callout type="tip" title={title}>{children}</Callout>
+}
+
+function ErrorBox({ children, title }: { children: React.ReactNode; title?: string }) {
+  return <Callout type="error" title={title}>{children}</Callout>
+}
+
+// Interactive Tabs component for switching commands/languages
+function Tabs({ items = [], children }: { items?: string[]; children: React.ReactNode }) {
+  const [activeTab, setActiveTab] = useState(0)
+  const childrenArray = React.Children.toArray(children)
+
+  return (
+    <div className="my-6 rounded-xl border border-border/80 dark:border-primary/20 bg-[#0c1017] overflow-hidden shadow-xl">
+      <div className="flex items-center gap-1 px-3 pt-2 bg-[#131923] border-b border-border/70 dark:border-primary/15 overflow-x-auto">
+        {items.map((item, index) => {
+          const isActive = activeTab === index
+          return (
+            <button
+              key={item}
+              type="button"
+              onClick={() => setActiveTab(index)}
+              className={`px-3.5 py-1.5 text-xs font-mono font-medium rounded-t-md transition-all duration-150 border-b-2 -mb-[1px] ${
+                isActive
+                  ? 'text-primary border-primary bg-primary/10'
+                  : 'text-muted-foreground border-transparent hover:text-foreground hover:bg-white/5'
+              }`}
+            >
+              {item}
+            </button>
+          )
+        })}
+      </div>
+      <div className="p-4">
+        {childrenArray[activeTab] || children}
+      </div>
+    </div>
+  )
+}
+
+function Tab({ children }: { children: React.ReactNode }) {
+  return <div>{children}</div>
+}
+
+// Collapsible Details / Accordion
+function Details({ summary = 'Ver detalles', children }: { summary?: string; children: React.ReactNode }) {
+  const [isOpen, setIsOpen] = useState(false)
+
+  return (
+    <div className="my-6 rounded-xl border border-primary/20 bg-secondary/30 backdrop-blur-sm overflow-hidden transition-all duration-200">
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full flex items-center justify-between p-4 text-left font-semibold text-sm text-foreground hover:bg-secondary/50 transition-colors"
+        aria-expanded={isOpen}
+      >
+        <span>{summary}</span>
+        <ChevronRight
+          className={`w-4 h-4 text-primary transition-transform duration-200 ${
+            isOpen ? 'rotate-90' : ''
+          }`}
+        />
+      </button>
+      {isOpen && (
+        <div className="px-4 pb-4 pt-1 border-t border-primary/10 text-sm text-muted-foreground leading-relaxed">
+          {children}
+        </div>
+      )}
+    </div>
+  )
+}
+
+// Keyboard shortcut tag
+function Kbd({ children }: { children: React.ReactNode }) {
+  return (
+    <kbd className="px-1.5 py-0.5 text-xs font-mono font-semibold text-foreground bg-muted border border-border rounded shadow-sm inline-block mx-0.5">
+      {children}
+    </kbd>
+  )
+}
+
 
 // Enhanced figure with caption
 function Figure({ children, caption }: { children: React.ReactNode; caption?: string }) {
@@ -296,11 +440,23 @@ const components: MDXComponents = {
   strong: (props) => <strong {...props} className="font-bold text-foreground" />,
   em: (props) => <em {...props} className="italic" />,
   // Custom components
+  Callout,
   InfoBox,
+  WarningBox,
+  SuccessBox,
+  TipBox,
+  ErrorBox,
+  Tabs,
+  Tab,
+  Details,
+  Accordion: Details,
+  Kbd,
+  Badge,
   Figure,
   BibliographyBox,
   BibEntry,
 }
+
 
 export default function MDXClient({ source }: { source: unknown }) {
   // @ts-expect-error MDXRemote needs MDXRemoteSerializeResult but source is already serialized
