@@ -12,6 +12,7 @@ import { TableOfContents } from '@/components/table-of-contents'
 import { MobileTableOfContents } from '@/components/mobile-table-of-contents'
 import { ReadingProgressBar } from '@/components/reading-progress-bar'
 import { BlogShareButtons } from '@/components/blog-share-buttons'
+import { BlogPostSchema } from '@/components/schema-markup'
 
 type Props = { params: Promise<{ slug: string }> }
 
@@ -76,6 +77,15 @@ export default async function PostPage({ params }: Props) {
 
   return (
     <>
+      <BlogPostSchema
+        title={title}
+        description={description}
+        date={date}
+        slug={slug}
+        image={image}
+        category={category}
+        tags={tags as string[]}
+      />
       <ReadingProgressBar />
       <div className="flex max-w-[1440px] mx-auto">
         <article className="container max-w-4xl mx-auto px-4 py-12 flex-1 min-w-0">
