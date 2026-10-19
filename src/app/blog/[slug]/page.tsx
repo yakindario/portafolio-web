@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge'
 import { Card } from '@/components/ui/card'
 import { ArrowLeft, Calendar, Clock, Tag, User, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react'
 import { TableOfContents } from '@/components/table-of-contents'
+import { MobileTableOfContents } from '@/components/mobile-table-of-contents'
 import { ReadingProgressBar } from '@/components/reading-progress-bar'
 import { BlogShareButtons } from '@/components/blog-share-buttons'
 
@@ -177,6 +178,9 @@ export default async function PostPage({ params }: Props) {
         </div>
       )}
 
+      {/* Mobile Table of Contents (visible en móviles y tablets) */}
+      <MobileTableOfContents />
+
       {/* Contenido Principal */}
       <div className="prose prose-neutral dark:prose-invert prose-lg max-w-none 
         prose-headings:text-foreground prose-headings:font-bold
@@ -184,8 +188,8 @@ export default async function PostPage({ params }: Props) {
         prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3
         prose-p:text-muted-foreground prose-p:leading-relaxed
         prose-a:text-primary prose-a:no-underline hover:prose-a:underline
-        prose-code:bg-secondary/60 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-foreground prose-code:before:content-none prose-code:after:content-none
-        prose-pre:bg-secondary/60 prose-pre:border prose-pre:border-primary/10
+        prose-code:before:content-none prose-code:after:content-none
+        prose-pre:bg-transparent prose-pre:p-0 prose-pre:border-0 prose-pre:my-0
         prose-blockquote:border-primary prose-blockquote:bg-secondary/20 prose-blockquote:py-1 prose-blockquote:not-italic
         prose-strong:text-foreground
         prose-li:text-muted-foreground

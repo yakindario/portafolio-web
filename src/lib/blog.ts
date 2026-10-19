@@ -3,6 +3,7 @@ import path from 'path'
 import matter from 'gray-matter'
 import { serialize } from 'next-mdx-remote/serialize'
 import remarkGfm from 'remark-gfm'
+import rehypeHighlight from 'rehype-highlight'
 
 const postsDir = path.join(process.cwd(), 'src', 'content', 'blog')
 
@@ -72,6 +73,7 @@ export async function getPostBySlug(slug: string) {
   const mdxSource = await serialize(content, {
     mdxOptions: {
       remarkPlugins: [remarkGfm],
+      rehypePlugins: [rehypeHighlight],
     },
   })
 
