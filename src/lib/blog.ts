@@ -6,7 +6,7 @@ import remarkGfm from 'remark-gfm'
 
 const postsDir = path.join(process.cwd(), 'src', 'content', 'blog')
 
-interface Post {
+export interface Post {
   slug: string
   excerpt: string
   readingTime: number
@@ -40,11 +40,11 @@ export async function getAllPosts(): Promise<Post[]> {
           const firstParagraph = (content || '').split(/\n\s*\n/).find((p) => p && p.trim().length > 0) || ''
           const plain = firstParagraph.replace(/[#>*`]/g, '').trim()
           const excerpt = plain.length > 160 ? plain.slice(0, 157) + '...' : plain
-          const readingTime = calculateReadingTime(content)
+          const readingTime = (data.readingTime as number) || calculateReadingTime(content)
           return { slug, excerpt, readingTime, ...(data as Record<string, unknown>) } as Post
         })
     )
-    // opcional: ordenar por fecha
+    // ordenar por fecha descendente
     posts.sort((a, b) => {
       const dateA = a.date || ''
       const dateB = b.date || ''
@@ -68,11 +68,30 @@ export async function getPostBySlug(slug: string) {
 
   const raw = await fs.readFile(fullPath, 'utf8')
   const { data, content } = matter(raw)
+  const readingTime = (data.readingTime as number) || calculateReadingTime(content)
   const mdxSource = await serialize(content, {
     mdxOptions: {
       remarkPlugins: [remarkGfm],
     },
   })
 
-  return { frontmatter: data as Record<string, unknown>, mdxSource }
+  return { frontmatter: { ...data, readingTime } as Record<string, unknown>, mdxSource }
 }
+
+export async function getAdjacentPosts(currentSlug: string) {
+  const posts = await getAllPosts()
+  const currentIndex = posts.findIndex((p) => p.slug === currentSlug)
+
+  if (currentIndex === -1) {
+    return { prevPost: null, nextPost: null }
+  }
+
+  // Ordenados de más reciente a más antiguo:
+  // nextPost es más nuevo (índice anterior)
+  // prevPost es más antiguo (índice siguiente)
+  const nextPost = currentIndex > 0 ? posts[currentIndex - 1] : null
+  const prevPost = currentIndex < posts.length - 1 ? posts[currentIndex + 1] : null
+
+  return { prevPost, nextPost }
+}
+

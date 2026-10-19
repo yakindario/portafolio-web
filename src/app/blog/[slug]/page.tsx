@@ -1,14 +1,16 @@
 import MDXClient from '@/components/mdx-client'
-import { getPostBySlug } from '@/lib/blog'
+import { getPostBySlug, getAdjacentPosts } from '@/lib/blog'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card } from '@/components/ui/card'
-import { ArrowLeft, Calendar, Clock, Tag, User, ArrowRight } from 'lucide-react'
+import { ArrowLeft, Calendar, Clock, Tag, User, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react'
 import { TableOfContents } from '@/components/table-of-contents'
 import { ReadingProgressBar } from '@/components/reading-progress-bar'
+import { BlogShareButtons } from '@/components/blog-share-buttons'
 
 type Props = { params: Promise<{ slug: string }> }
 
@@ -16,22 +18,27 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   try {
     const { frontmatter } = await getPostBySlug(slug)
+    const title = (frontmatter.title as string) || ''
+    const description = (frontmatter.description as string) || `Lee sobre ${title}`
+    const image = frontmatter.image ? [String(frontmatter.image)] : undefined
 
     return {
-      title: `${frontmatter.title} | Yakin Dario`,
-      description: (frontmatter.description as string) || `Lee sobre ${frontmatter.title}`,
+      title: `${title} | Yakin Dario`,
+      description,
       openGraph: {
-        title: frontmatter.title as string,
-        description: (frontmatter.description as string) || undefined,
+        title,
+        description: description || undefined,
         type: 'article',
         publishedTime: frontmatter.date as string,
         authors: ['Yakin Dario'],
         tags: (frontmatter.tags as string[]) || [],
+        images: image,
       },
       twitter: {
         card: 'summary_large_image',
-        title: frontmatter.title as string,
-        description: (frontmatter.description as string) || undefined,
+        title,
+        description: description || undefined,
+        images: image,
       },
       alternates: {
         canonical: `/blog/${slug}`,
@@ -55,6 +62,8 @@ export default async function PostPage({ params }: Props) {
   } catch {
     notFound()
   }
+
+  const { prevPost, nextPost } = await getAdjacentPosts(slug)
   
   const title = String(frontmatter.title || '')
   const date = String(frontmatter.date || '')
@@ -62,6 +71,7 @@ export default async function PostPage({ params }: Props) {
   const tags = Array.isArray(frontmatter.tags) ? frontmatter.tags : []
   const readingTime = frontmatter.readingTime ? String(frontmatter.readingTime) : ''
   const description = String(frontmatter.description || '')
+  const image = frontmatter.image ? String(frontmatter.image) : ''
 
   return (
     <>
@@ -80,7 +90,7 @@ export default async function PostPage({ params }: Props) {
       </div>
 
       {/* Hero Header con glassmorphism */}
-      <Card className="bg-secondary/40 backdrop-blur-sm border-primary/10 p-8 md:p-12 mb-12">
+      <Card className="bg-secondary/40 backdrop-blur-sm border-primary/10 p-8 md:p-12 mb-8">
         <header className="space-y-6">
           {/* Categoría y fecha */}
           <div className="flex flex-wrap items-center gap-4">
@@ -135,18 +145,37 @@ export default async function PostPage({ params }: Props) {
             </div>
           )}
 
-          {/* Autor */}
-          <div className="flex items-center gap-3 pt-4 border-t border-primary/10">
-            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-              <User className="w-5 h-5 text-primary" />
+          {/* Autor y Compartir */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t border-primary/10">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                <User className="w-5 h-5 text-primary" />
+              </div>
+              <div>
+                <p className="font-medium text-sm">Yakin Dario</p>
+                <p className="text-xs text-muted-foreground">Ingeniero Telemático</p>
+              </div>
             </div>
-            <div>
-              <p className="font-medium">Yakin Dario</p>
-              <p className="text-sm text-muted-foreground">Ingeniero Telemático</p>
-            </div>
+
+            <BlogShareButtons title={title} slug={slug} />
           </div>
         </header>
       </Card>
+
+      {/* Imagen de Portada Hero */}
+      {image && (
+        <div className="relative w-full aspect-[21/9] sm:aspect-[16/7] rounded-2xl overflow-hidden mb-12 border border-primary/15 shadow-2xl bg-secondary/30 group">
+          <Image
+            src={image}
+            alt={title}
+            fill
+            priority
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 896px"
+            className="object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-background/70 via-transparent to-transparent pointer-events-none" />
+        </div>
+      )}
 
       {/* Contenido Principal */}
       <div className="prose prose-neutral dark:prose-invert prose-lg max-w-none 
@@ -164,8 +193,56 @@ export default async function PostPage({ params }: Props) {
         <MDXClient source={mdxSource} />
       </div>
 
+      {/* Compartir al final del artículo */}
+      <div className="mt-12 p-6 rounded-xl border border-primary/10 bg-secondary/30 backdrop-blur-sm flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div>
+          <p className="font-semibold text-foreground text-sm">¿Te resultó útil este artículo?</p>
+          <p className="text-xs text-muted-foreground">Compártelo con otros desarrolladores o ingenieros de redes.</p>
+        </div>
+        <BlogShareButtons title={title} slug={slug} />
+      </div>
+
+      {/* Navegación entre posts: Anterior / Siguiente */}
+      {(prevPost || nextPost) && (
+        <nav aria-label="Navegación entre artículos" className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
+          {prevPost ? (
+            <Link
+              href={`/blog/${prevPost.slug}`}
+              className="group block p-5 rounded-xl border border-primary/10 bg-secondary/30 hover:bg-secondary/60 hover:border-primary/40 transition-all duration-200"
+            >
+              <div className="flex items-center gap-1.5 text-xs font-mono text-muted-foreground group-hover:text-primary transition-colors mb-2">
+                <ChevronLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
+                <span>ARTÍCULO ANTERIOR</span>
+              </div>
+              <p className="font-semibold text-foreground text-sm line-clamp-2 group-hover:text-primary transition-colors">
+                {prevPost.title}
+              </p>
+            </Link>
+          ) : (
+            <div className="hidden sm:block" />
+          )}
+
+          {nextPost ? (
+            <Link
+              href={`/blog/${nextPost.slug}`}
+              className="group block p-5 rounded-xl border border-primary/10 bg-secondary/30 hover:bg-secondary/60 hover:border-primary/40 transition-all duration-200 text-left sm:text-right"
+            >
+              <div className="flex items-center justify-start sm:justify-end gap-1.5 text-xs font-mono text-muted-foreground group-hover:text-primary transition-colors mb-2">
+                <span>SIGUIENTE ARTÍCULO</span>
+                <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+              </div>
+              <p className="font-semibold text-foreground text-sm line-clamp-2 group-hover:text-primary transition-colors">
+                {nextPost.title}
+              </p>
+            </Link>
+          ) : (
+            <div className="hidden sm:block" />
+          )}
+        </nav>
+      )}
+
       {/* Footer del artículo */}
-      <Card className="bg-secondary/40 backdrop-blur-sm border-primary/10 p-8 mt-16">
+      <Card className="bg-secondary/40 backdrop-blur-sm border-primary/10 p-8 mt-8">
         <div className="flex flex-col sm:flex-row justify-between items-center gap-6">
           {/* Autor */}
           <div className="flex items-center gap-4">
