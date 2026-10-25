@@ -420,9 +420,24 @@ const components: MDXComponents = {
 
   h4: (props) => <h4 {...props} className="text-xl font-semibold text-foreground mt-6 mb-2" />,
   p: (props) => <p {...props} className="leading-7 text-muted-foreground my-4" />,
-  ul: (props) => <ul {...props} className="list-disc list-inside space-y-2 my-4 text-muted-foreground" />,
-  ol: (props) => <ol {...props} className="list-decimal list-inside space-y-2 my-4 text-muted-foreground" />,
-  li: (props) => <li {...props} className="leading-7" />,
+  ul: (props) => (
+    <ul
+      {...props}
+      className="list-disc list-outside pl-6 space-y-2 my-4 text-muted-foreground [&_ul]:my-1.5 [&_ol]:my-1.5"
+    />
+  ),
+  ol: (props) => (
+    <ol
+      {...props}
+      className="list-decimal list-outside pl-6 space-y-2 my-4 text-muted-foreground [&_ul]:my-1.5 [&_ol]:my-1.5"
+    />
+  ),
+  li: (props) => (
+    <li
+      {...props}
+      className="leading-7 pl-1 text-muted-foreground [&>p]:inline [&>p]:my-0 [&>p+p]:block [&>p+p]:mt-2"
+    />
+  ),
   blockquote: (props) => (
     <blockquote {...props} className="border-l-4 border-primary pl-4 italic text-muted-foreground my-4" />
   ),

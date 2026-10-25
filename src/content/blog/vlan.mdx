@@ -88,21 +88,13 @@ Trama Ethernet con Etiqueta IEEE 802.1Q:
 La etiqueta de 4 bytes se divide en dos bloques principales de 16 bits cada uno: **TPID** y **TCI**:
 
 1. **TPID (Tag Protocol Identifier — 16 bits / 2 bytes):** Tiene el valor hexadecimal fijo `0x8100`. Cuando un switch lee este valor en la posición donde normalmente iría el EtherType, identifica inmediatamente que la trama contiene una etiqueta 802.1Q.
-    
 2. **TCI (Tag Control Information — 16 bits / 2 bytes):** Se subdivide en tres campos:
-    
-    - **PCP (Priority Code Point — 3 bits):** Utilizado por el estándar **IEEE 802.1p** para Calidad de Servicio (QoS) en Capa 2 (conocido como _CoS - Class of Service_). Permite asignar 8 niveles de prioridad (de `0` a `7`), donde el valor `5` suele reservarse para tráfico crítico de voz (VoIP).
-        
-    - **DEI (Drop Eligible Indicator — 1 bit):** Anteriormente llamado _CFI (Canonical Format Indicator)_. Indica si la trama puede ser descartada con preferencia en caso de congestión en la red (o compatibilidad heredada con Token Ring).
-        
-    - **VID (VLAN Identifier — 12 bits):** Identifica el número de VLAN al que pertenece la trama. Al contar con 12 bits ($2^{12}$), ofrece **4096 valores posibles (0 al 4095)**, distribuidos así:
-        
-        - **Reservados por el estándar:** `0` (usado solo para priorización 802.1p sin ID de VLAN) y `4095` (uso interno del sistema). Ninguno de los dos es asignable.
-            
-        - **Rango Normal (`1` – `1005`):** Rango estándar almacenable en el archivo `vlan.dat`. La **VLAN 1** es la predeterminada y las VLANs **`1002` a `1005`** están reservadas por defecto en Cisco IOS para redes heredadas (FDDI y Token Ring) y no pueden eliminarse.
-            
-        - **Rango Extendido (`1006` – `4094`):** Utilizadas en redes de proveedores de servicios o grandes centros de datos. En switches Cisco, requieren que el protocolo VTP esté en modo `transparent`, `off` o versión 3.
-            
+   - **PCP (Priority Code Point — 3 bits):** Utilizado por el estándar **IEEE 802.1p** para Calidad de Servicio (QoS) en Capa 2 (conocido como _CoS - Class of Service_). Permite asignar 8 niveles de prioridad (de `0` a `7`), donde el valor `5` suele reservarse para tráfico crítico de voz (VoIP).
+   - **DEI (Drop Eligible Indicator — 1 bit):** Anteriormente llamado _CFI (Canonical Format Indicator)_. Indica si la trama puede ser descartada con preferencia en caso de congestión en la red (o compatibilidad heredada con Token Ring).
+   - **VID (VLAN Identifier — 12 bits):** Identifica el número de VLAN al que pertenece la trama. Al contar con 12 bits ($2^{12}$), ofrece **4096 valores posibles (0 al 4095)**, distribuidos así:
+     - **Reservados por el estándar:** `0` (usado solo para priorización 802.1p sin ID de VLAN) y `4095` (uso interno del sistema). Ninguno de los dos es asignable.
+     - **Rango Normal (`1` – `1005`):** Rango estándar almacenable en el archivo `vlan.dat`. La **VLAN 1** es la predeterminada y las VLANs **`1002` a `1005`** están reservadas por defecto en Cisco IOS para redes heredadas (FDDI y Token Ring) y no pueden eliminarse.
+     - **Rango Extendido (`1006` – `4094`):** Utilizadas en redes de proveedores de servicios o grandes centros de datos. En switches Cisco, requieren que el protocolo VTP esté en modo `transparent`, `off` o versión 3.
 
 ### Buenas Prácticas de Seguridad: La VLAN Nativa y VLAN Hopping
 
