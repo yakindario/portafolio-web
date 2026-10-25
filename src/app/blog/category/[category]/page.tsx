@@ -8,19 +8,50 @@ import { Metadata } from 'next'
 
 type Props = { params: Promise<{ category: string }> }
 
+export async function generateStaticParams() {
+  const posts = await getAllPosts()
+  const categories = Array.from(new Set(posts.map((p) => p.category).filter(Boolean)))
+  return categories.map((category) => ({
+    category: String(category),
+  }))
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { category } = await params
   const categoryTitle = category.charAt(0).toUpperCase() + category.slice(1)
+  const title = `Categoría: ${categoryTitle}`
+  const description = `Explora todos los artículos técnicos y tutoriales sobre ${categoryTitle} en el blog de Yakin Dario.`
+  const url = `https://yakindario.me/blog/category/${category}`
   
   return {
-    title: `${categoryTitle} | Blog - Yakin Dario`,
-    description: `Artículos sobre ${categoryTitle} en el blog de Yakin Dario.`,
-    openGraph: {
-      title: `${categoryTitle} | Blog - Yakin Dario`,
-      description: `Artículos sobre ${categoryTitle} en el blog de Yakin Dario.`,
-    },
+    title,
+    description,
     alternates: {
-      canonical: `/blog/category/${category}`,
+      canonical: url,
+    },
+    openGraph: {
+      title,
+      description,
+      url,
+      siteName: 'Yakin Dario',
+      locale: 'es_ES',
+      type: 'website',
+      images: [
+        {
+          url: 'https://yakindario.me/Yakindario.webp',
+          width: 1200,
+          height: 630,
+          alt: `Categoría ${categoryTitle} - Yakin Dario`,
+          type: 'image/webp',
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      creator: '@yakindario',
+      images: ['https://yakindario.me/Yakindario.webp'],
     },
   }
 }

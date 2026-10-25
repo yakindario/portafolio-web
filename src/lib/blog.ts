@@ -77,7 +77,7 @@ export async function getPostBySlug(slug: string) {
     },
   })
 
-  return { frontmatter: { ...data, readingTime } as Record<string, unknown>, mdxSource }
+  return { frontmatter: { ...data, readingTime } as Record<string, unknown>, content, mdxSource }
 }
 
 export async function getAdjacentPosts(currentSlug: string) {

@@ -1,5 +1,8 @@
-import MDXClient from '@/components/mdx-client'
-import { getPostBySlug, getAdjacentPosts } from '@/lib/blog'
+import { MDXRemote } from 'next-mdx-remote/rsc'
+import remarkGfm from 'remark-gfm'
+import rehypeHighlight from 'rehype-highlight'
+import { mdxComponents } from '@/components/mdx-components'
+import { getPostBySlug, getAdjacentPosts, getAllPosts } from '@/lib/blog'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Metadata } from 'next'
@@ -16,39 +19,61 @@ import { BlogPostSchema } from '@/components/schema-markup'
 
 type Props = { params: Promise<{ slug: string }> }
 
+export async function generateStaticParams() {
+  const posts = await getAllPosts()
+  return posts.map((post) => ({
+    slug: post.slug,
+  }))
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   try {
     const { frontmatter } = await getPostBySlug(slug)
     const title = (frontmatter.title as string) || ''
     const description = (frontmatter.description as string) || `Lee sobre ${title}`
-    const image = frontmatter.image ? [String(frontmatter.image)] : undefined
+    const rawImage = frontmatter.image ? String(frontmatter.image) : '/Yakindario.webp'
+    const imageUrl = rawImage.startsWith('http') ? rawImage : `https://yakindario.me${rawImage.startsWith('/') ? '' : '/'}${rawImage}`
+    const postUrl = `https://yakindario.me/blog/${slug}`
+    const imageType = imageUrl.endsWith('.webp') ? 'image/webp' : imageUrl.endsWith('.png') ? 'image/png' : 'image/jpeg'
 
     return {
-      title: `${title} | Yakin Dario`,
+      title,
       description,
+      alternates: {
+        canonical: postUrl,
+      },
       openGraph: {
         title,
-        description: description || undefined,
+        description,
+        url: postUrl,
+        siteName: 'Yakin Dario',
+        locale: 'es_ES',
         type: 'article',
         publishedTime: frontmatter.date as string,
         authors: ['Yakin Dario'],
         tags: (frontmatter.tags as string[]) || [],
-        images: image,
+        images: [
+          {
+            url: imageUrl,
+            width: 1200,
+            height: 630,
+            alt: title,
+            type: imageType,
+          },
+        ],
       },
       twitter: {
         card: 'summary_large_image',
         title,
-        description: description || undefined,
-        images: image,
-      },
-      alternates: {
-        canonical: `/blog/${slug}`,
+        description,
+        creator: '@yakindario',
+        images: [imageUrl],
       },
     }
   } catch {
     return {
-      title: 'Post no encontrado | Yakin Dario',
+      title: 'Post no encontrado',
     }
   }
 }
@@ -56,11 +81,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function PostPage({ params }: Props) {
   const { slug } = await params
   let frontmatter: Record<string, unknown>
-  let mdxSource
+  let content: string
   try {
     const post = await getPostBySlug(slug)
     frontmatter = post.frontmatter
-    mdxSource = post.mdxSource
+    content = post.content
   } catch {
     notFound()
   }
@@ -204,7 +229,16 @@ export default async function PostPage({ params }: Props) {
         prose-strong:text-foreground
         prose-li:text-muted-foreground
         prose-img:rounded-lg prose-img:border prose-img:border-primary/10">
-        <MDXClient source={mdxSource} />
+        <MDXRemote
+          source={content}
+          options={{
+            mdxOptions: {
+              remarkPlugins: [remarkGfm],
+              rehypePlugins: [rehypeHighlight],
+            },
+          }}
+          components={mdxComponents}
+        />
       </div>
 
       {/* Compartir al final del artículo */}

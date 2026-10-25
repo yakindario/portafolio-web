@@ -3,14 +3,34 @@ import { BlogGrid } from '@/components/blog-grid'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Blog | Yakindario - Ingeniería de Redes & DevOps',
-  description: 'Artículos técnicos, tutoriales y reflexiones sobre redes, desarrollo y arquitectura de sistemas.',
-  openGraph: {
-    title: 'Blog | Yakindario - Ingeniería de Redes & DevOps',
-    description: 'Artículos técnicos, tutoriales y reflexiones sobre redes, desarrollo y arquitectura de sistemas.',
-  },
+  title: 'Blog - Ingeniería de Redes & DevOps',
+  description: 'Artículos técnicos, tutoriales y reflexiones sobre redes, cloud computing, desarrollo y arquitectura de sistemas.',
   alternates: {
-    canonical: '/blog',
+    canonical: 'https://yakindario.me/blog',
+  },
+  openGraph: {
+    title: 'Blog | Yakin Dario - Ingeniería de Redes & DevOps',
+    description: 'Artículos técnicos, tutoriales y reflexiones sobre redes, cloud computing, desarrollo y arquitectura de sistemas.',
+    url: 'https://yakindario.me/blog',
+    siteName: 'Yakin Dario',
+    locale: 'es_ES',
+    type: 'website',
+    images: [
+      {
+        url: 'https://yakindario.me/Yakindario.webp',
+        width: 1200,
+        height: 630,
+        alt: 'Blog de Yakin Dario',
+        type: 'image/webp',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Blog | Yakin Dario - Ingeniería de Redes & DevOps',
+    description: 'Artículos técnicos, tutoriales y reflexiones sobre redes, cloud computing, desarrollo y arquitectura de sistemas.',
+    creator: '@yakindario',
+    images: ['https://yakindario.me/Yakindario.webp'],
   },
 }
 
