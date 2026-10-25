@@ -1,0 +1,333 @@
+---
+title: "Qué es una VLAN (IEEE 802.1Q): Guía Completa"
+date: "2026-10-25"
+description: "Aprende qué es una VLAN, cómo funciona el etiquetado IEEE 802.1Q, diferencias entre puertos Access y Trunk, y cómo configurarlas paso a paso en switches Cisco."
+category: "Redes"
+tags: ["vlan", "cisco", "ccna", "802.1q", "switching", "redes"]
+image: "https://cdn.yakindario.me/Redes/vlan.webp"
+---
+
+
+# VLANs (Virtual Local Area Networks): Funcionamiento, Estándar 802.1Q y Configuración en Cisco IOS
+
+Una **VLAN (Virtual Local Area Network)** es una tecnología de red de **Capa 2 (Enlace de Datos)** del modelo OSI que permite dividir lógicamente un switch físico en múltiples **dominios de difusión (broadcast domains)** independientes. 
+
+En lugar de depender de la ubicación física de los cables para separar departamentos o servicios, las VLANs segmentan la red mediante software directamente en la configuración del switch.
+
+<TipBox title="Regla de Oro de las VLANs">
+**Regla de oro de las VLANs:** Por defecto, los dispositivos asignados a distintas VLANs están aislados en Capa 2 y **no pueden comunicarse entre sí**, incluso si están conectados al mismo switch físico. Para que exista comunicación entre diferentes VLANs, es obligatorio utilizar un dispositivo de **Capa 3** (un router o un switch multicapa L3) que enrute el tráfico entre subredes.
+</TipBox>
+---
+
+## 1. El Problema de las Redes Planas y los Beneficios de usar VLANs
+
+### Red Conmutada Tradicional (Sin VLANs)
+En una red LAN plana donde todos los puertos pertenecen a la configuración de fábrica:
+* **Un switch = Un único dominio de broadcast:** Cuando un dispositivo envía una trama de difusión (por ejemplo, una petición **ARP** buscando una dirección MAC o un cliente **DHCP** solicitando una dirección IP), el switch inunda (*flooding*) la trama por absolutamente todos sus puertos activos. A medida que la red crece, este tráfico satura el ancho de banda y consume ciclos de CPU en todos los hosts conectados.
+* **Sin aislamiento ni seguridad:** Cualquier usuario conectado al switch comparte el mismo segmento de Capa 2 que el resto de la organización. Esto facilita ataques de interceptación en red local (como *ARP Spoofing* o *DHCP Starvation*) y permite visibilidad directa hacia servidores, cámaras o equipos de otros departamentos.
+
+### Beneficios de Implementar VLANs
+1. **Reducción de Dominios de Broadcast:** El tráfico de difusión queda estrictamente contenido dentro de los puertos que pertenecen a la misma VLAN. Una trama broadcast en la VLAN 10 jamás será reenviada a los puertos de la VLAN 20.
+2. **Seguridad y Segmentación Lógica:** Permite aislar tráfico sensible por función o criticidad (ej. servidores de producción, contabilidad, cámaras de videovigilancia CCTV o redes de invitados) y aplicar políticas de firewall entre segmentos.
+3. **Flexibilidad Operativa y Escalabilidad:** Si un empleado cambia de oficina o de departamento, el administrador de red solo necesita reasignar la VLAN de su puerto mediante comandos CLI, sin necesidad de recablear el rack de telecomunicaciones.
+
+---
+
+## 2. Tipos de VLAN y sus Aplicaciones en Producción
+
+En el diseño de redes empresariales, las VLANs se clasifican según el tipo de tráfico que transportan:
+
+* **VLAN de Datos (Data VLAN):** Diseñada exclusivamente para el tráfico generado por usuarios finales y equipos de cómputo (PCs, laptops, impresoras).
+* **VLAN de Voz (Voice VLAN):** Red dedicada al tráfico de telefonía IP (**VoIP**). Se configura de forma independiente para aplicar políticas de Calidad de Servicio (**QoS**), garantizando prioridad en la cola de envío, baja latencia (< 150 ms) y bajo *jitter* (variación de retardo), además de separar la señalización de voz del tráfico de datos.
+* **VLAN de Gestión (Management VLAN):** Reservada exclusivamente para el acceso administrativo a la infraestructura de red (switches, routers, puntos de acceso) mediante protocolos como **SSH**, **HTTPS** o **SNMP**. Nunca debe mezclarse con el tráfico de usuarios finales.
+* **VLAN de Invitados (Guest VLAN):** Proporciona salida hacia Internet para visitantes o dispositivos externos (BYOD), bloqueando en Capa 3 cualquier visibilidad hacia los servidores y recursos internos de la empresa.
+* **VLAN Predeterminada (Default VLAN):** En switches Cisco, es la **VLAN 1**. Todos los puertos pertenecen a ella de fábrica y transporta protocolos de control como CDP, VTP y PAgP.
+* **VLAN Nativa (Native VLAN):** Concepto exclusivo de los enlaces troncales **IEEE 802.1Q**. Es la VLAN cuyo tráfico viaja **sin etiqueta (untagged)** a través de un enlace troncal.
+
+---
+
+## 3. Modos de Puerto en un Switch: Access vs. Trunk
+
+Los puertos de un switch administrable operan principalmente en dos modos según el dispositivo que se conecte en el otro extremo:
+
+| Característica | Puerto de Acceso (Access) | Puerto Troncal (Trunk) |
+| :--- | :--- | :--- |
+| **Destino habitual** | Dispositivos finales (PCs, impresoras, servidores, cámaras IP). | Interconexión entre switches, routers (ROAS), firewalls o hipervisores (ESXi/Proxmox). |
+| **VLANs soportadas** | Una única VLAN de datos (+ una VLAN de voz opcional si hay un teléfono IP intermedio). | Múltiples VLANs de forma simultánea sobre un mismo cable físico. |
+| **Etiquetado 802.1Q** | **Sin etiqueta (Untagged).** La tarjeta de red de una PC común no necesita conocer en qué VLAN está; el switch añade la etiqueta al recibir la trama y la retira antes de enviarla al host. | **Con etiqueta (Tagged)** para distinguir a qué VLAN pertenece cada trama (excepto el tráfico de la VLAN Nativa, que viaja sin etiquetar por defecto). |
+| **Comando base (Cisco)** | `switchport mode access` | `switchport mode trunk` |
+
+---
+
+## 4. El Estándar IEEE 802.1Q (VLAN Tagging)
+
+Cuando dos switches se conectan mediante un puerto **Troncal (Trunk)**, necesitan un mecanismo para saber si una trama que cruza el cable pertenece a la VLAN 10 o a la VLAN 20. El estándar abierto **IEEE 802.1Q** (conocido como *dot1q*) resuelve esto insertando una etiqueta (**Tag**) de **4 bytes (32 bits)** dentro del encabezado de la trama Ethernet original, justo entre la dirección MAC de Origen y el campo EtherType:
+
+```text
+Trama Ethernet Estándar:
+[ Dest MAC (6B) | Src MAC (6B) | EtherType (2B) | Payload (46-1500B) | FCS (4B) ]
+
+Trama Ethernet con Etiqueta IEEE 802.1Q:
+[ Dest MAC (6B) | Src MAC (6B) | 802.1Q Tag (4B) | EtherType (2B) | Payload (46-1500B) | FCS (4B) ]
+                                       |
+               +-----------------------+-----------------------+
+               |                                               |
+       [ TPID: 16 bits ]                               [ TCI: 16 bits ]
+           (0x8100)                         [ PCP (3b) | DEI (1b) | VID (12b) ]
+```
+
+<TipBox title="Recálculo de FCS en Tramas 802.1Q">
+**Nota técnica sobre el FCS:** Dado que el switch modifica la trama al insertar los 4 bytes de la etiqueta 802.1Q, está obligado a **recalcular el FCS (Frame Check Sequence / CRC)** al final de la trama antes de transmitirla por el enlace troncal. Asimismo, el tamaño máximo de la trama aumenta de 1518 a **1522 bytes** (_Baby Giant frame_).
+</TipBox>
+
+
+
+
+### Campos del Encabezado 802.1Q (32 bits en total)
+
+La etiqueta de 4 bytes se divide en dos bloques principales de 16 bits cada uno: **TPID** y **TCI**:
+
+1. **TPID (Tag Protocol Identifier — 16 bits / 2 bytes):** Tiene el valor hexadecimal fijo `0x8100`. Cuando un switch lee este valor en la posición donde normalmente iría el EtherType, identifica inmediatamente que la trama contiene una etiqueta 802.1Q.
+    
+2. **TCI (Tag Control Information — 16 bits / 2 bytes):** Se subdivide en tres campos:
+    
+    - **PCP (Priority Code Point — 3 bits):** Utilizado por el estándar **IEEE 802.1p** para Calidad de Servicio (QoS) en Capa 2 (conocido como _CoS - Class of Service_). Permite asignar 8 niveles de prioridad (de `0` a `7`), donde el valor `5` suele reservarse para tráfico crítico de voz (VoIP).
+        
+    - **DEI (Drop Eligible Indicator — 1 bit):** Anteriormente llamado _CFI (Canonical Format Indicator)_. Indica si la trama puede ser descartada con preferencia en caso de congestión en la red (o compatibilidad heredada con Token Ring).
+        
+    - **VID (VLAN Identifier — 12 bits):** Identifica el número de VLAN al que pertenece la trama. Al contar con 12 bits ($2^{12}$), ofrece **4096 valores posibles (0 al 4095)**, distribuidos así:
+        
+        - **Reservados por el estándar:** `0` (usado solo para priorización 802.1p sin ID de VLAN) y `4095` (uso interno del sistema). Ninguno de los dos es asignable.
+            
+        - **Rango Normal (`1` – `1005`):** Rango estándar almacenable en el archivo `vlan.dat`. La **VLAN 1** es la predeterminada y las VLANs **`1002` a `1005`** están reservadas por defecto en Cisco IOS para redes heredadas (FDDI y Token Ring) y no pueden eliminarse.
+            
+        - **Rango Extendido (`1006` – `4094`):** Utilizadas en redes de proveedores de servicios o grandes centros de datos. En switches Cisco, requieren que el protocolo VTP esté en modo `transparent`, `off` o versión 3.
+            
+
+### Buenas Prácticas de Seguridad: La VLAN Nativa y VLAN Hopping
+
+Por defecto, la **VLAN Nativa** en un troncal 802.1Q es la **VLAN 1** y sus tramas viajan sin etiqueta por compatibilidad con equipos antiguos. Mantener esta configuración predeterminada expone la red a dos ataques clásicos de Capa 2 (**VLAN Hopping**):
+
+- **Switch Spoofing (Explotación de DTP):** Los switches Cisco utilizan por defecto el protocolo propietario **DTP (Dynamic Trunking Protocol)** para negociar enlaces troncales automáticamente. Si un atacante conecta su equipo a un puerto con DTP activo y envía tramas DTP falsificadas, el switch convertirá el puerto en _Trunk_, dándole acceso a todas las VLANs.
+
+- **Double Tagging (Doble Etiquetado):** Si un atacante está conectado a un puerto de acceso que pertenece a la misma VLAN que la VLAN Nativa del troncal (ej. VLAN 1), puede inyectar una trama con dos etiquetas 802.1Q (externa: VLAN 1, interna: VLAN 20). El primer switch quitará la etiqueta de la VLAN 1 por ser la nativa y reenviará la trama por el troncal con la segunda etiqueta intacta hacia la VLAN 20.
+
+**Cómo mitigarlo en entornos reales:**
+
+1. Cambiar la VLAN nativa en todos los troncales a una VLAN dedicada donde **nunca** haya dispositivos conectados (ej. `VLAN 99` o `VLAN 999`).
+2. Desactivar la negociación DTP en los puertos mediante `switchport nonegotiate` y configurar explícitamente los puertos de usuario con `switchport mode access`.
+3. Opcionalmente, forzar el etiquetado de la VLAN nativa a nivel global con el comando `vlan dot1q tag native`.
+
+
+## Comunicación Inter-VLAN (Enrutamiento en Capa 3)
+
+Dado que las VLANs separan dominios de broadcast y cada VLAN se asocia a una **subred IP distinta** (relación 1 a 1), para que un equipo de la VLAN 10 (`192.168.10.0/24`) se comunique con uno de la VLAN 20 (`192.168.20.0/24`) existen dos arquitecturas principales:
+
+1. **Router-on-a-Stick (ROAS):** Utiliza un único enlace físico configurado como _Trunk 802.1Q_ entre el switch de Capa 2 y una interfaz física de un router. Dentro del router, esa interfaz física se divide en múltiples **subinterfaces lógicas** (ej. `Gi0/0.10` y `Gi0/0.20`), configuradas con encapsulación `dot1Q` y la dirección IP que actuará como _Default Gateway_ (puerta de enlace) de cada VLAN.
+2. **Switch Multicapa (Layer 3 Switch con SVI):** El propio switch tiene capacidades de enrutamiento en hardware (ASIC). Se habilita el comando `ip routing` y se crean **Interfaces Virtuales de Switch (SVI)** para cada VLAN (ej. `interface Vlan 10` e `interface Vlan 20`), asignándoles directamente la IP del gateway sin necesidad de salir a un router externo.
+
+|**Criterio**|**Router-on-a-Stick (ROAS)**|**Switch Multicapa (L3 Switch / SVI)**|
+|---|---|---|
+|**Rendimiento**|Limitado por el ancho de banda del único cable troncal y la CPU del router.|Muy alto (enrutamiento a velocidad de cable mediante chips ASIC en hardware).|
+|**Latencia**|Mayor (el tráfico debe salir del switch hacia el router y regresar por el mismo cable).|Mínima (el tráfico se enruta internamente dentro del backplane del switch).|
+|**Costo**|Económico (aprovecha el router WAN existente y switches L2 básicos).|Mayor inversión inicial (requiere licencias y hardware de switch Capa 3).|
+|**Escenario ideal**|Redes pequeñas, sucursales (Branch Offices) o laboratorios CCNA.|Redes de campus medianas/grandes, núcleos de red (Core/Distribution) y Data Centers.|
+## Laboratorio Práctico: Configuración de VLANs y Trunk en Cisco IOS
+
+A continuación, implementaremos la topología del escenario práctico donde conectamos dos pisos (representados por **SW1** y **SW2**) separando los departamentos de **Ventas (VLAN 10)** y **TI (VLAN 20)** a través de un enlace troncal en el puerto `GigabitEthernet 0/1`.
+
+![Topología de VLANs y Enlace Troncal](https://cdn.yakindario.me/Redes/vlan1.webp)
+
+### Tabla de Direccionamiento del Escenario
+
+|**Dispositivo**|**Interfaz del Switch**|**VLAN Asignada**|**Dirección IP / Máscara**|
+|---|---|---|---|
+|**PC Ventas (Piso 1)**|`SW1` - `Fa0/1` (Access)|VLAN 10 (`VENTAS`)|`192.168.10.10 /24`|
+|**PC TI (Piso 1)**|`SW1` - `Fa0/2` (Access)|VLAN 20 (`TI`)|`192.168.20.10 /24`|
+|**PC Ventas (Piso 2)**|`SW2` - `Fa0/1` (Access)|VLAN 10 (`VENTAS`)|`192.168.10.20 /24`|
+|**PC TI (Piso 2)**|`SW2` - `Fa0/2` (Access)|VLAN 20 (`TI`)|`192.168.20.20 /24`|
+|**Enlace Troncal**|`SW1 Gi0/1` <-> `SW2 Gi0/1`|VLANs permitidas: `10, 20, 99`|N/A (Capa 2 - 802.1Q)|
+### Paso 1: Configuración del Switch 1 (SW1)
+
+
+
+```cli
+Switch> enable
+Switch# configure terminal
+Switch(config)# hostname SW1
+
+! 1. Crear las VLANs de usuarios y la VLAN Nativa de seguridad
+SW1(config)# vlan 10
+SW1(config-vlan)# name VENTAS
+SW1(config-vlan)# exit
+
+SW1(config)# vlan 20
+SW1(config-vlan)# name TI
+SW1(config-vlan)# exit
+
+SW1(config)# vlan 99
+SW1(config-vlan)# name NATIVA_SEGURIDAD
+SW1(config-vlan)# exit
+
+! 2. Configurar Puertos de Acceso para las PCs del Piso 1
+SW1(config)# interface FastEthernet 0/1
+SW1(config-if)# description PC_VENTAS_PISO1
+SW1(config-if)# switchport mode access
+SW1(config-if)# switchport access vlan 10
+SW1(config-if)# no shutdown
+SW1(config-if)# exit
+
+SW1(config)# interface FastEthernet 0/2
+SW1(config-if)# description PC_TI_PISO1
+SW1(config-if)# switchport mode access
+SW1(config-if)# switchport access vlan 20
+SW1(config-if)# no shutdown
+SW1(config-if)# exit
+
+! 3. Configurar el Puerto Troncal hacia el Switch 2 (con seguridad aplicada)
+SW1(config)# interface GigabitEthernet 0/1
+SW1(config-if)# description TRONCAL_HACIA_SW2
+! Nota: En switches antiguos o L3 que soportan ISL y 802.1Q, descomentar la siguiente línea:
+! SW1(config-if)# switchport trunk encapsulation dot1q
+SW1(config-if)# switchport mode trunk
+SW1(config-if)# switchport trunk native vlan 99
+SW1(config-if)# switchport trunk allowed vlan 10,20,99
+SW1(config-if)# switchport nonegotiate
+SW1(config-if)# no shutdown
+SW1(config-if)# end
+
+! 4. Guardar la configuración en NVRAM
+SW1# copy running-config startup-config
+```
+
+### Paso 2: Configuración del Switch 2 (SW2)
+
+Es fundamental que las mismas VLANs existan en la base de datos de ambos switches y que la **VLAN nativa coincida exactamente** en ambos extremos del enlace troncal:
+
+
+
+```cli
+Switch> enable
+Switch# configure terminal
+Switch(config)# hostname SW2
+
+! 1. Crear las mismas VLANs en SW2
+SW2(config)# vlan 10
+SW2(config-vlan)# name VENTAS
+SW2(config-vlan)# exit
+
+SW2(config)# vlan 20
+SW2(config-vlan)# name TI
+SW2(config-vlan)# exit
+
+SW2(config)# vlan 99
+SW2(config-vlan)# name NATIVA_SEGURIDAD
+SW2(config-vlan)# exit
+
+! 2. Configurar Puertos de Acceso para las PCs del Piso 2
+SW2(config)# interface FastEthernet 0/1
+SW2(config-if)# description PC_VENTAS_PISO2
+SW2(config-if)# switchport mode access
+SW2(config-if)# switchport access vlan 10
+SW2(config-if)# no shutdown
+SW2(config-if)# exit
+
+SW2(config)# interface FastEthernet 0/2
+SW2(config-if)# description PC_TI_PISO2
+SW2(config-if)# switchport mode access
+SW2(config-if)# switchport access vlan 20
+SW2(config-if)# no shutdown
+SW2(config-if)# exit
+
+! 3. Configurar el Puerto Troncal hacia el Switch 1
+SW2(config)# interface GigabitEthernet 0/1
+SW2(config-if)# description TRONCAL_HACIA_SW1
+! SW2(config-if)# switchport trunk encapsulation dot1q
+SW2(config-if)# switchport mode trunk
+SW2(config-if)# switchport trunk native vlan 99
+SW2(config-if)# switchport trunk allowed vlan 10,20,99
+SW2(config-if)# switchport nonegotiate
+SW2(config-if)# no shutdown
+SW2(config-if)# end
+
+SW2# copy running-config startup-config
+```
+
+##  Comandos de Verificación y Troubleshooting en Cisco IOS
+
+Una vez aplicada la configuración, nunca des por terminado el trabajo sin verificar el estado de la base de datos de VLANs y la negociación del enlace troncal.
+
+### Verificar la creación de VLANs y asignación de puertos de acceso
+
+El comando `show vlan brief` muestra todas las VLANs activas y qué interfaces de acceso pertenecen a cada una (los puertos troncales como `Gi0/1` **no** aparecen en esta lista porque transportan múltiples VLANs):
+
+
+
+```cli
+SW1# show vlan brief
+
+VLAN Name                             Status    Ports
+---- -------------------------------- --------- -------------------------------
+1    default                          active    Fa0/3, Fa0/4, Gi0/2
+10   VENTAS                           active    Fa0/1
+20   TI                               active    Fa0/2
+99   NATIVA_SEGURIDAD                 active    
+1002 fddi-default                     act/unsup 
+1003 token-ring-default               act/unsup 
+1004 fddinet-default                  act/unsup 
+1005 trnet-default                    act/unsup 
+```
+
+### 2. Verificar el estado del enlace troncal 802.1Q
+
+El comando `show interfaces trunk` es el más importante para auditar troncales. Confirma el protocolo de encapsulación (`802.1q`), la VLAN nativa (`99`) y qué VLANs están realmente activas y reenviando tráfico en Spanning Tree:
+
+
+```cli
+SW1# show interfaces trunk
+
+Port        Mode             Encapsulation  Status        Native vlan
+Gi0/1       on               802.1q         trunking      99
+
+Port        Vlans allowed on trunk
+Gi0/1       10,20,99
+
+Port        Vlans allowed and active in management domain
+Gi0/1       10,20,99
+
+Port        Vlans in spanning tree forwarding state and not pruned
+Gi0/1       10,20,99
+```
+
+### 3. Verificar las pruebas de conectividad (Ping)
+
+Con base en nuestro diagrama:
+
+- **Ping de `192.168.10.10` (SW1) a `192.168.10.20` (SW2):** **Exitoso.** La trama entra por `Fa0/1` en SW1, se etiqueta con `VID 10` al salir por el troncal `Gi0/1`, SW2 lee la etiqueta, la retira y entrega la trama por su puerto `Fa0/1`.
+    
+- **Ping de `192.168.10.10` (VLAN 10) a `192.168.20.10` (VLAN 20):** **Falla.** Aunque ambos equipos están conectados al mismo `SW1`, pertenecen a dominios de difusión y subredes distintas y no hemos conectado aún un router o configurado una SVI de Capa 3.
+    
+
+### Errores Comunes en Producción (Checklist de Diagnóstico)
+
+- **La VLAN fue asignada al puerto, pero no existe en `vlan.dat`:** Si ejecutas `switchport access vlan 10` en un switch moderno, IOS suele crear la VLAN automáticamente; sin embargo, si solo permites una VLAN en un troncal (`allowed vlan 10`) pero olvidaste crearla globalmente con `vlan 10` en el switch intermedio, el tráfico será descartado silenciosamente.
+    
+- **Uso de `allowed vlan` sin la palabra clave `add`:** En producción, si un troncal ya transporta las VLANs `10,20` y ejecutas `switchport trunk allowed vlan 30`, **sobreescribirás** la lista y causarás una caída inmediata en las VLANs 10 y 20. Usa siempre `switchport trunk allowed vlan add 30` para agregar una VLAN sin interrumpir el servicio.
+    
+- **Discrepancia de VLAN Nativa (_Native VLAN Mismatch_):** Si `SW1` tiene `native vlan 99` y `SW2` se quedó en `native vlan 1`, verás alertas constantes de CDP en consola y Spanning Tree bloqueará el puerto por inconsistencia de PVID.
+    
+
+## 8. Preguntas Frecuentes (FAQ)
+
+### ¿Cuántas VLANs se pueden crear como máximo en un switch?
+
+El campo **VID** del estándar IEEE 802.1Q tiene 12 bits ($2^{12} = 4096$). Descontando las VLANs reservadas por el estándar (`0` y `4095`), existen **4094 VLANs teóricas utilizables** (del `1` al `4094`). En switches Cisco, las VLANs `1002` a `1005` también están reservadas para tecnologías heredadas, dejando **4090 VLANs configurables** (aunque el límite práctico de instancias simultáneas de Spanning Tree depende del modelo de hardware del switch).
+
+### ¿Qué pasa si elimino una VLAN a la que todavía pertenecen puertos activos?
+
+Si ejecutas `no vlan 10` sin antes reasignar los puertos que pertenecen a esa VLAN (como `Fa0/1`), esos puertos quedarán **huérfanos (inactivos)** en un estado ambar/bloqueado y no regresarán automáticamente a la VLAN 1. Los dispositivos conectados perderán red hasta que reasignes sus interfaces manualmente con `switchport access vlan <id>` o vuelvas a crear la VLAN 10.
+
+### ¿Por qué el tráfico de la VLAN Nativa viaja sin etiquetar (untagged)?
+
+El comité IEEE 802.1Q diseñó la VLAN Nativa originalmente por retrocompatibilidad con topologías antiguas donde aún existían **hubs (concentradores)** o dispositivos en medio de un enlace entre switches que no comprendían etiquetas 802.1Q. Hoy en día, donde las conexiones entre switches son punto a punto dedicadas, su función principal es el transporte de ciertos protocolos de control o simplemente se aísla en una VLAN sin uso por motivos de seguridad.
+

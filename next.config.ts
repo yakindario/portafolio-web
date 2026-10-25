@@ -6,7 +6,12 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'yakindario.me',
-        pathname: '/Redes/**',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdn.yakindario.me',
+        pathname: '/**',
       },
       {
         protocol: 'https',
